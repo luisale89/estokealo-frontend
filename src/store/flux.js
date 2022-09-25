@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
             userLoggedIn: false,
             appLoading: false,
-            user: {}
+            user: {name:"luis"}
 		},
 		actions: {
             login_user: () => {
@@ -25,7 +25,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				/**
 					fetch().then().then(data => setStore({ "foo": data.bar }))
                 */
-               setStore({appLoading: true})
+               fetch('https://swapi.dev/api/people/1/', {
+                  method: 'GET', // or 'PUT'
+                  headers: {
+                     'Content-Type': 'application/json',
+                  },
+                  // mode: "*cors",
+                  // body: JSON.stringify({name: "data"}),
+                  })
+                  .then((response) => response.json())
+                  .then((data) => {
+                     console.log('Success:', data);
+                  })
+                  .catch((error) => {
+                     console.error('Error:', error);
+                  });
+               setStore({appLoading: true});
             },
             updateTables: (newTables) => {
                 setStore({tables: newTables});

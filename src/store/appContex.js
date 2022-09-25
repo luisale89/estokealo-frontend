@@ -31,6 +31,7 @@ const injectContext = PassedComponent => {
 			 * state.actions.loadSomeData(); <---- calling this function from the flux.js actions
 			 *
 			 **/
+			state.actions.loadSomeData();
 			//eslint-disable-next-line
 		}, []);
 
