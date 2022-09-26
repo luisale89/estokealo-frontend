@@ -48,7 +48,7 @@ const validations  = {
 };
 
 export const validate_field = (event, rq_fields_fb) => {
-    const {name, type, value} = event.target;
+    let {name, type, value} = event.target;
     type = typeof(type) !== 'undefined' ? type : "text"; //default type for validations
     value = typeof(value) !== 'undefined' ? value : ""; //default value for validate
 

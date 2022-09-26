@@ -89,7 +89,7 @@ export const SignIn = () => {
                         onChange={handleInputChange}
                         onKeyPress={noSpace}
                         onBlur={checkField}
-                        disabled={store.loading_API}
+                        disabled={store.loading}
                         required
                     />
                 </div>
@@ -106,7 +106,7 @@ export const SignIn = () => {
                         onKeyPress={noSpace}
                         onChange={handleInputChange}
                         onBlur={checkField}
-                        disabled={store.loading_API}
+                        disabled={store.loading}
                         required
                     />
                     <span 
@@ -122,11 +122,13 @@ export const SignIn = () => {
                     <button 
                         className="btn"
                         type="submit"
-                        disabled={store.loading_API}>
-                            {store.loading_API ? <span>Cargando...</span> : "Aceptar"}
+                        disabled={store.loading}>
+                            {store.loading ? <span>Cargando...</span> : "Aceptar"}
                     </button>
                 </div>
             </form>
+                {store.loading && <span>loading signing...</span>}
+                <div>{`${JSON.stringify(store.user)}`}</div>
                 <div id="signin-image">side image...</div>
         </div>
     )

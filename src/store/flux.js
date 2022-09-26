@@ -1,10 +1,13 @@
 //eslint-disable-next-line
 const getState = ({ getStore, getActions, setStore }) => {
+   const api_base_url = "http://127.0.0.1:5000";
+   const access_token = localStorage.getItem("access_token") || "-";
+
 	return {
 		store: {
             userLoggedIn: false,
-            appLoading: false,
-            user: {name:"luis"}
+            user: {},
+            loading: false
 		},
 		actions: {
             login_user: () => {
@@ -15,32 +18,49 @@ const getState = ({ getStore, getActions, setStore }) => {
                return "user logged-in";
             },
             logout_user: () => {
-				/*
+				   /*
 					logout_function to complete with API
                 */
-                setStore({userLoggedIn: false});
-                return "user logged-out";
+               setStore({userLoggedIn: false, user: {}, loading: true});
+               localStorage.removeItem("access_token");
+
+               return "user logged-out";
             },
-            loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-                */
-               fetch('https://swapi.dev/api/people/1/', {
-                  method: 'GET', // or 'PUT'
+            getUserData: () => {
+               /**
+                  fetch().then().then(data => setStore({ "foo": data.bar }))
+               */
+               setStore({loading: true});
+               const actions = getActions();
+
+               fetch(`${api_base_url}/user/`, {
+                  method: "GET", // or 'DELETE'
                   headers: {
                      'Content-Type': 'application/json',
+                     'Authorization': `Bearer ${access_token}`
                   },
-                  // mode: "*cors",
                   // body: JSON.stringify({name: "data"}),
-                  })
-                  .then((response) => response.json())
-                  .then((data) => {
-                     console.log('Success:', data);
-                  })
-                  .catch((error) => {
-                     console.error('Error:', error);
-                  });
-               setStore({appLoading: true});
+               })
+               .then((response) => {
+                  console.log('response:', response);
+                  if (response.ok) {
+                     setStore({userLoggedIn: true})
+
+                  } else {
+                     if (response.status === 401) {
+                        actions.logout_user();
+                     };
+                  }
+                  return response.json()
+               })
+               .then((data) => {
+                  setStore({user: data.payload, loading: false})
+                  console.log(data);
+               })
+               .catch((error) => {
+                  setStore({loading: false});
+                  console.error('Error:', error);
+               });
             },
             updateTables: (newTables) => {
                 setStore({tables: newTables});
