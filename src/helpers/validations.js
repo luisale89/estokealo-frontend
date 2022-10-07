@@ -4,90 +4,77 @@ usuario como feedback.
 - Cada función requiere como parámetro:
 1.- El evento que fué disparado por el input en el formulario. (name, type, value)
 2.- Campos que están en el state, los que sirven de moldes para ser actualizados como salida de cada función.
-** Validate_all requiere como parámetro el id del formulario que se quiere validar, para que se pueda
+** validateFormInputs requiere como parámetro el id del formulario que se quiere validar, para que se pueda
 encontrar a través del DOM e iterar cada uno de sus elementos **
 Cada función retorna un objeto igual al state, que luego será actualizado en la función callback.
 */
 
-export const fb_styles= { // util para mostrar feedback al usuario en los formularios.
-    valid: "valid",
-    invalid: "invalid"
-};
-
-const valid_types = ["text", "email", "password"]; // tipos de inputs que se están validando.
+const handled_validations = ["email", "password"]; // tipos de inputs que se están validando.
 
 // estas son las validaciones..
 const validations  = {
     email: (email) => { // cuando el tipo del campo a ser validado es email.
         const reEmail = /\S+@\S+\.\S+/; //expresion regular para verificar email.
+
         if (reEmail.test(email)) {
-            return {valid: true, feedback: {class: fb_styles.valid, msg: "ok"}}
-        } else {
-            return {valid: false, feedback: {class: fb_styles.invalid, msg: "email es inválido"}}
+            return {valid: true, msg: "ok"}
         }
+
+        return {valid: false, msg: "El correo electrónico ingresado es inválido"}
     },
+
     password: (passw) => { // cuando el tipo del campo a ser validado es password.
         const rePassw = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/; //expresion regular para verificar contraseña
         passw = typeof(passw) !== 'undefined' ? passw : "invalid";
 
         if (rePassw.test(passw)) {
-            return {valid: true, feedback: {class: fb_styles.valid, msg: "Ok"}}
-        } else {
-            return {valid: false, feedback: {class: fb_styles.invalid, msg: "Contraseña inválida"}}
+            return {valid: true, msg: "ok"}
         }
-    },
-    text: (text) => { // cuando el tipo del campo a ser validado es texto.(sin caracteres especiales)
-        const reText = /[^a-zA-Z -]/; //sin caracteres especiales
-        
-        if (reText.test(text)){
-            return {valid: false, feedback: {msg: "Caracter especial", class: fb_styles.invalid}}
-        } else {
-            return {valid: false, feedback: {msg: "ok", class: fb_styles.valid}}
-        }
+
+        return {valid: false, msg: "La contraseña ingresada es inválida"}
     }
 };
 
-export const validate_field = (event, rq_fields_fb) => {
+
+export const validate_field = (event, feedback_state) => {
+    //
     let {name, type, value} = event.target;
     type = typeof(type) !== 'undefined' ? type : "text"; //default type for validations
     value = typeof(value) !== 'undefined' ? value : ""; //default value for validate
 
-    if (!valid_types.includes(type)) {
-        return Object.assign(rq_fields_fb, {[name]: {class: fb_styles.invalid, msg: "bug: invalid type"}})
-
-    } else if (value.trim() === "") {
-        return Object.assign(rq_fields_fb, {[name]: {class: fb_styles.invalid, msg: "Campo requerido"}})
-
-    } else {
-        return Object.assign(rq_fields_fb, {[name]: validations[type](value).feedback})
+    if (handled_validations.includes(type)) {
+        return Object.assign(feedback_state, {[name]: validations[type](value)})
     }
+    return;
 };
 
-export const validate_all = (form_id, rq_fields_fb) => { // will return an object with a valid flag and a object of feedback.
+
+export const validateFormInputs = (form_id, feedback_state) => { // will return an object with a valid flag and a object of feedback.
     const ele = document.getElementById(form_id);
-    let feedback = {};
+    let feedback = feedback_state;
     let all_valid = true;
 
     for (let i = 0; i < ele.length; i++ ) {
 
         const {name, type, value, required} = ele[i]; //se desestructura cada elemento del formulario.
 
-        if (required) {
-            if (value.trim() === "") { // si el campo está vacío:
-                feedback[name] = {class: fb_styles.invalid, msg: "Campo requerido"};
-                all_valid = false;
-            } else if (!valid_types.includes(type)) { // si el tipo del campo es inválido -> bug
-                feedback[name] = {class: fb_styles.invalid, msg: "bug: invalid type"};
-                all_valid = false;
-            } else { // se ejecuta validación del campo.
+        if (required) { //ignora los campos que no son requeridos.
+            
+            if (handled_validations.includes(type)) {
                 const rev = validations[type](value);
-                feedback[name] = rev.feedback;
+                feedback[name] = rev;
                 all_valid = all_valid && rev.valid;
+
+            } else if (value.trim() === "") { // si el campo está vacío:
+                feedback[name] = {valid: false, msg: "Por favor, completa este campo"};
+                all_valid = false;
             }
         }
     }
-    return({valid: all_valid, feedback: Object.assign(rq_fields_fb, feedback)});
+
+    return({valid: all_valid, feedback: Object.assign(feedback_state, feedback)});
 };
+
 
 export const noSpace = (event) => {
     if (event.charCode === 32) {

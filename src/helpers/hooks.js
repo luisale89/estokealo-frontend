@@ -15,6 +15,7 @@ const useFetch = (resource="", body={}, options={}) => {
             "Content-type": "application/json",
             "Authorization": `Bearer ${localStorage.getItem("access_token")}`
         },
+        redirect: options.redirect || "error"
     };
     if (options.method === "PUT" || options.method === "POST") {
         request_config = { ...request_config, body: JSON.stringify(body) }
@@ -29,10 +30,10 @@ const useFetch = (resource="", body={}, options={}) => {
         .then((response) => {
             console.log("Response: ", response);
             if (!response.ok) {
-                setError(response.status) //status code (400, 401, etc...)
                 if (response.status === 401) {
                     actions.logout_user(); // logout user when unauthorized
                 }
+                setError(response.status); //status code (400, 401, etc...)
             }
             return response.json();
         })

@@ -5,16 +5,17 @@ se debe incluir como parámetros:
 Cada función retorna un objeto igual al state, que luego será actualizado en la función callback. */
 
 
-export const handleChange = (event, fields) => { 
-    // como inputs tiene el evento del input y los campos "fields" del state del componente
+export const handleChange = (event, fields_state) => { 
+    // como inputs tiene el evento del input y los campos "fields_state" del state del componente
     const {value, type, name, checked} = event.target;
 
         if (type === "checkbox") {
-            return Object.assign(fields, {
+            return Object.assign(fields_state, {
                 [name]: checked
             });
         } else {
-            return Object.assign(fields, {
+            //limit max value length for text fields
+            return Object.assign(fields_state, {
                 [name]: value
             });
         }
