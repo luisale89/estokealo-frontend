@@ -1,0 +1,22 @@
+@import 'vars';
+@import 'mixins';
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    font-family: $main-font-stack;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+}
+
+#root {
+    height: 100%;
+}
+
+@import "./components/buttons";
+@import "./components/form";

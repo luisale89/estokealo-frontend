@@ -56,7 +56,7 @@ export const SignIn = () => {
                 {/* email field */}
                 <div className="form-group">
                     <label htmlFor={form_fields.email}>Correo electrónico:</label>
-                    <span className={`invalid-tooltip ${state.feedback[form_fields.email].valid ? "hide" : "show"}`}>
+                    <span className={`invalid-tooltip ${state.feedback[form_fields.email].valid ? "valid" : "invalid"}`}>
                         {state.feedback[form_fields.email].msg}
                     </span>
                     <input
@@ -75,7 +75,7 @@ export const SignIn = () => {
                 {/* submit button */}
                 <div className="submit-container">
                     <button 
-                        className="submit-btn"
+                        className="btn btn-primary"
                         type="submit"
                         disabled={store.loading}>
                             {store.loading ? <span>Cargando...</span> : "Siguiente"}

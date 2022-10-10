@@ -8,16 +8,17 @@ const useFetch = (resource="", body={}, options={}) => {
     //eslint-disable-next-line
     const {store, actions} = useContext(Context);
     const api_base_url = "http://127.0.0.1:5000";
+    const {method = "GET", parameters = ""} = options
 
     let request_config = {
-        method: options.method || "GET",
+        method: method || "GET",
         headers: {
             "Content-type": "application/json",
             "Authorization": `Bearer ${localStorage.getItem("access_token")}`
         },
         redirect: options.redirect || "error"
     };
-    if (options.method === "PUT" || options.method === "POST") {
+    if (method === "PUT" || method === "POST") {
         request_config = { ...request_config, body: JSON.stringify(body) }
     }
 
@@ -26,7 +27,7 @@ const useFetch = (resource="", body={}, options={}) => {
         setData(null);
         setError(null);
 
-        fetch(`${api_base_url}${resource}${options.params || ""}`, request_config)
+        fetch(`${api_base_url}${resource}${parameters}`, request_config)
         .then((response) => {
             console.log("Response: ", response);
             if (!response.ok) {

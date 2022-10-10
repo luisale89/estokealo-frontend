@@ -20,7 +20,7 @@ const validations  = {
             return {valid: true, msg: "ok"}
         }
 
-        return {valid: false, msg: "El correo electrónico ingresado es inválido"}
+        return {valid: false, msg: "Ingresa un correo electrónico válido"}
     },
 
     password: (passw) => { // cuando el tipo del campo a ser validado es password.

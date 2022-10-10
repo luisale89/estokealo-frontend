@@ -1,0 +1,30 @@
+.btn {
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    border-radius: 5px;
+    margin: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-link {
+    @include btn-link($color-primary);
+    &.title {
+        font-size: 1.2em;
+    }
+}
+
+.btn-primary {
+    @include btn-filled($color-primary);
+}
+
+.btn-danger {
+    @include btn-filled($color-danger);
+}
+
+.btn-outline-primary {
+    @include btn-outline($color-primary);
+}

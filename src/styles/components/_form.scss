@@ -1,0 +1,47 @@
+.form-group {
+    position: relative;
+    margin-bottom: 10px;
+    label {
+        @include form-label($text-muted);
+        font-size: 1em;
+    }
+    input {
+        @include form-input(#FFF, $color-bg, $text-muted);
+    }
+    .invalid-tooltip {
+        @include tooltip($color-danger);
+        right: 0px;
+        top: 0px;
+    }
+    span.show-password {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        color: $color-bg;
+        cursor: pointer;
+        svg {
+            height: 1.8em;
+            width: auto;
+            color: $color-primary;
+        }
+    }
+}
+
+.form-inline-group {
+    position: relative;
+    margin-bottom: 10px;
+    label {
+        @include form-label($text-muted);
+        font-size: 1em;
+        max-width: 50%;
+    }
+    input {
+        @include form-input(#FFF, $color-bg, $text-muted);
+        max-width: 50%;
+    }
+    .invalid-tooltip {
+        @include tooltip($color-danger);
+        right: 0px;
+        top: 15px;
+    }
+}
