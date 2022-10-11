@@ -52,38 +52,44 @@ export const SignIn = () => {
 
     return (
         <div className="signin-view">
-            <form id="signin-form" onSubmit={handleSubmit} noValidate autoComplete="on">
-                {/* email field */}
-                <div className="form-group">
-                    <label htmlFor={form_fields.email}>Correo electrónico:</label>
-                    <span className={`invalid-tooltip ${state.feedback[form_fields.email].valid ? "valid" : "invalid"}`}>
-                        {state.feedback[form_fields.email].msg}
-                    </span>
-                    <input
-                        className={state.feedback[form_fields.email].valid ? "valid" : "invalid"}
-                        type="email" 
-                        placeholder="Ingesa tu correo electrónico" 
-                        name={form_fields.email}
-                        value={state.fields[form_fields.email]}
-                        onChange={handleInputChange}
-                        onKeyPress={noSpace}
-                        onBlur={checkField}
-                        disabled={store.loading}
-                        required
-                    />
-                </div>
-                {/* submit button */}
-                <div className="submit-container">
-                    <button 
-                        className="btn btn-primary"
-                        type="submit"
-                        disabled={store.loading}>
-                            {store.loading ? <span>Cargando...</span> : "Siguiente"}
-                    </button>
-                </div>
-            </form>
+            <div className="form-container">
+                <h1>Estokealo</h1>
+                <p>Ingrese sus datos para iniciar sesión:</p>
+                <form id="signin-form" onSubmit={handleSubmit} noValidate autoComplete="on">
+                    {/* email field */}
+                    <div className="form-group">
+                        <label htmlFor={form_fields.email}>Correo electrónico:</label>
+                        <span className={`invalid-tooltip ${state.feedback[form_fields.email].valid ? "valid" : "invalid"}`}>
+                            {state.feedback[form_fields.email].msg}
+                        </span>
+                        <input
+                            className={state.feedback[form_fields.email].valid ? "valid" : "invalid"}
+                            type="email" 
+                            placeholder="Ingesa tu correo electrónico" 
+                            name={form_fields.email}
+                            value={state.fields[form_fields.email]}
+                            onChange={handleInputChange}
+                            onKeyPress={noSpace}
+                            onBlur={checkField}
+                            disabled={store.loading}
+                            required
+                        />
+                    </div>
+                    {/* submit button */}
+                    <div className="submit-container">
+                        <button 
+                            className="btn btn-primary"
+                            type="submit"
+                            disabled={store.loading}>
+                                {store.loading ? <span>Cargando...</span> : "Siguiente"}
+                        </button>
+                    </div>
+                </form>
+                <p className="btn-link">¿no tienes cuenta? crea una cuenta</p>
+            </div>
             {store.loading && <span>loading signing...</span>}
-            <div id="signin-image">side image...</div>
+            <div className="side-container">
+            </div>
         </div>
     )
 }

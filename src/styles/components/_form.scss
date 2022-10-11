@@ -2,16 +2,16 @@
     position: relative;
     margin-bottom: 10px;
     label {
-        @include form-label($text-muted);
+        @include form-label($text-primary);
         font-size: 1em;
     }
     input {
-        @include form-input(#FFF, $color-bg, $text-muted);
+        @include form-input(#FFF, $color-bg, $text-primary);
     }
     .invalid-tooltip {
         @include tooltip($color-danger);
-        right: 0px;
-        top: 0px;
+        right: 0%;
+        top: 110%;
     }
     span.show-password {
         position: absolute;

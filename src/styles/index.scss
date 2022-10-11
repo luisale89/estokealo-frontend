@@ -18,5 +18,8 @@ html, body {
     height: 100%;
 }
 
+//components
 @import "./components/buttons";
 @import "./components/form";
+//partials
+@import "./partials/signin";

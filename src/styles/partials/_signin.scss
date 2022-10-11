@@ -1,0 +1,22 @@
+div.signin-view {
+    @include flex-container($justify:flex-start, $items:center);
+    height: 100%;
+    .form-container{
+        @include flex-item($order:0, $basis: 500px);
+        padding: 10px;
+        margin: 10px;
+        height: 100%;
+        overflow: scroll;
+        form#signin-form {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid lighten($color: $text-muted, $amount: 30%);
+        }
+    }
+    .side-container{
+        flex: 1;
+        background-color: $color-bg;
+        height: 100%;
+        overflow: scroll;
+    }
+}
