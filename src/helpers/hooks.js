@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Context } from '../store/appContex';
 
-const useFetch = (resource="", body={}, options={}) => {
+const useFetch = (resource="", options={}, body={}) => {
     const [data, setData] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(0);

@@ -7,7 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
             userLoggedIn: false,
             user: {},
-            loading: false
+            loading: false,
 		},
 		actions: {
             login_user: () => {
@@ -23,44 +23,50 @@ const getState = ({ getStore, getActions, setStore }) => {
                 */
                setStore({userLoggedIn: false, user: {}, loading: true});
                localStorage.removeItem("access_token");
-
                return "user logged-out";
             },
-            getUserData: () => {
-               /**
-                  fetch().then().then(data => setStore({ "foo": data.bar }))
-               */
-               setStore({loading: true});
+            fetchData: (url="", method="GET", parameters="", body={}) => {
                const actions = getActions();
-
-               fetch(`${api_base_url}/user/`, {
-                  method: "GET", // or 'DELETE'
+               let request_config = {
+                  method: method,
                   headers: {
-                     'Content-Type': 'application/json',
-                     'Authorization': `Bearer ${access_token}`
+                      "Content-type": "application/json",
+                      "Authorization": `Bearer ${access_token}`
                   },
-                  // body: JSON.stringify({name: "data"}),
-               })
-               .then((response) => {
-                  console.log('response:', response);
-                  if (response.ok) {
-                     setStore({userLoggedIn: true})
+                  redirect: "error",
+                  mode: "cors"
+              };
+              if (method === "PUT" || method === "POST") {
+                  request_config = { ...request_config, body: JSON.stringify(body) }
+              };
 
-                  } else {
+               setStore({loading: true});
+               const response = fetch(`${api_base_url}${url}${parameters}`, request_config)
+               .then(response => {
+                  //when response is resolved
+                  setStore({loading: false});
+                  if (!response.ok) {
                      if (response.status === 401) {
                         actions.logout_user();
                      };
                   }
-                  return response.json()
+                  return response.json();
                })
-               .then((data) => {
-                  setStore({user: data.payload, loading: false})
-                  console.log(data);
+               .then(data => {
+                  const {result, message} = data
+                  console.log(message);
+                  if (result === 404) {
+                     console.log("yes is 404");
+                  }
+                  //returs promise to caller
+                  return data
                })
-               .catch((error) => {
+               .catch(error => {
                   setStore({loading: false});
-                  console.error('Error:', error);
+                  console.log(error);
                });
+
+               return response
             },
             updateTables: (newTables) => {
                 setStore({tables: newTables});

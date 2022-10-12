@@ -11,7 +11,7 @@ export const SignIn = () => {
         email: "user-email"
     }
 
-    const [state, setState] = useState({
+    const [form, setForm] = useState({
         fields: {
             [form_fields.email]: ""
         },
@@ -20,34 +20,42 @@ export const SignIn = () => {
         }
     });
 
+    const [userPublicInfo, setUserPublicInfo] = useState({});
+
     const handleSubmit = (event) => { //event is the form that submit
         // se realiza validación de todos los requeridos y si todos son validos, se procede con el submit
         event.preventDefault();
-        const {valid, feedback} = validateFormInputs(event.target.id, state.feedback) // valida todos los campos requeridos del formulario con id
-        setState({
+        const {valid, feedback} = validateFormInputs(event.target.id, form.feedback) // valida todos los campos requeridos del formulario con id
+        setForm({
             feedback: feedback,
-            ...state
+            ...form
         });
 
         if (!valid) { // si no fueron validados los campos requeridos
             console.log("formulario no cumple con las validaciones");
             return;
         }
-        
-        const result = actions.login_user(); // envío de formulario a API - Recibe mensajes desde backend y muestra feedback en formulario en caso de algún error.
-        console.log(result);
+        //promise
+        actions.fetchData(`/auth/email-public-info?email=${form.fields[form_fields.email]}`)
+        .then(data =>{
+            const {result, payload} = data
+            if (result === 404) {
+                console.log("404 -> redirect to sigup form with data as prop")
+            };
+            setUserPublicInfo(payload);
+        });
     };
 
     const handleInputChange = (event) => {
-        setState({
-            fields: handleChange(event, state.fields),
-            feedback: Object.assign(state.feedback, {[event.target.name]: {valid:true, msg:""}}),
-            ...state
+        setForm({
+            fields: handleChange(event, form.fields),
+            feedback: Object.assign(form.feedback, {[event.target.name]: {valid:true, msg:""}}),
+            ...form
         })
     };
 
     const checkField = (event) => {
-        setState({feedback: validate_field(event, state.feedback), ...state});
+        setForm({feedback: validate_field(event, form.feedback), ...form});
     };
 
     return (
@@ -59,15 +67,15 @@ export const SignIn = () => {
                     {/* email field */}
                     <div className="form-group">
                         <label htmlFor={form_fields.email}>Correo electrónico:</label>
-                        <span className={`invalid-tooltip ${state.feedback[form_fields.email].valid ? "valid" : "invalid"}`}>
-                            {state.feedback[form_fields.email].msg}
+                        <span className={`invalid-tooltip ${form.feedback[form_fields.email].valid ? "valid" : "invalid"}`}>
+                            {form.feedback[form_fields.email].msg}
                         </span>
                         <input
-                            className={state.feedback[form_fields.email].valid ? "valid" : "invalid"}
+                            className={form.feedback[form_fields.email].valid ? "valid" : "invalid"}
                             type="email" 
                             placeholder="Ingesa tu correo electrónico" 
                             name={form_fields.email}
-                            value={state.fields[form_fields.email]}
+                            value={form.fields[form_fields.email]}
                             onChange={handleInputChange}
                             onKeyPress={noSpace}
                             onBlur={checkField}
@@ -87,8 +95,8 @@ export const SignIn = () => {
                 </form>
                 <p className="btn-link">¿no tienes cuenta? crea una cuenta</p>
             </div>
-            {store.loading && <span>loading signing...</span>}
             <div className="side-container">
+                <span>{JSON.stringify(userPublicInfo || "")}</span>
             </div>
         </div>
     )
