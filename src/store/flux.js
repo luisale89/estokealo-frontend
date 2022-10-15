@@ -1,32 +1,55 @@
 //eslint-disable-next-line
 const getState = ({ getStore, getActions, setStore }) => {
    const api_base_url = "http://127.0.0.1:5000";
-   const access_token = localStorage.getItem("access_token") || "-";
 
 	return {
 		store: {
             userLoggedIn: false,
-            user: {},
             loading: false,
+            backdrop: true
 		},
 		actions: {
-            login_user: () => {
+            login_user: (payload={}) => {
 				/*
 					login_function to complete with API
                 */
+               localStorage.setItem("access_token", payload.accessToken);
                setStore({userLoggedIn: true});
-               return "user logged-in";
+               return null;
             },
             logout_user: () => {
 				   /*
 					logout_function to complete with API
                 */
-               setStore({userLoggedIn: false, user: {}, loading: true});
-               localStorage.removeItem("access_token");
-               return "user logged-out";
-            },
-            fetchData: (url="", method="GET", parameters="", body={}) => {
+               const access_token = localStorage.getItem("access_token");
                const actions = getActions();
+               if (access_token) {
+                  actions.fetchData("/auth/logout", "DELETE");
+                  localStorage.removeItem("access_token");
+                  setStore({userLoggedIn: false, backdrop: true});
+               }
+               return null;
+            },
+            test_user_validation: () => {
+               const actions = getActions();
+               const access_token = localStorage.getItem("access_token");
+               //fetch user endpoint
+               if (!access_token) {
+                  setStore({userLoggedIn: false, backdrop: false});
+               } else {
+                  setStore({backdrop: true});
+                  actions.fetchData("/user/")
+                  .then(data => {
+                     //eslint-disable-next-line
+                     const { result, payload } = data;
+                     result === 200 ? setStore({userLoggedIn: true}) : setStore({userLoggedIn: false});
+                  });
+               }
+               return null;
+            },
+            fetchData: (url="", method="GET", body={}, parameters="") => {
+               const actions = getActions();
+               const access_token = localStorage.getItem("access_token");
                let request_config = {
                   method: method,
                   headers: {
@@ -35,16 +58,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                   },
                   redirect: "error",
                   mode: "cors"
-              };
-              if (method === "PUT" || method === "POST") {
-                  request_config = { ...request_config, body: JSON.stringify(body) }
-              };
-
+               };
+               if (method === "PUT" || method === "POST") {
+                     request_config = { ...request_config, body: JSON.stringify(body) }
+               };
                setStore({loading: true});
+               //fetch
                const response = fetch(`${api_base_url}${url}${parameters}`, request_config)
                .then(response => {
                   //when response is resolved
-                  setStore({loading: false});
                   if (!response.ok) {
                      if (response.status === 401) {
                         actions.logout_user();
@@ -53,19 +75,20 @@ const getState = ({ getStore, getActions, setStore }) => {
                   return response.json();
                })
                .then(data => {
-                  const {result, message} = data
-                  console.log(message);
+                  const {result, payload} = data
+                  setStore({loading: false, backdrop: false});
                   if (result === 404) {
-                     console.log("yes is 404");
+                     console.log(payload);
                   }
                   //returs promise to caller
                   return data
                })
                .catch(error => {
-                  setStore({loading: false});
-                  console.log(error);
+                  setStore({loading: false, backdrop: false});
+                  return {result: 500, payload: error}
                });
-
+               console.log("fetch finished");
+               //return promise
                return response
             },
             updateTables: (newTables) => {

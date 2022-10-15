@@ -57,7 +57,6 @@ export const validateFormInputs = (form_id, feedback_state) => { // will return 
     for (let i = 0; i < ele.length; i++ ) {
 
         const {name, type, value, required} = ele[i]; //se desestructura cada elemento del formulario.
-
         if (required) { //ignora los campos que no son requeridos.
             
             if (handled_validations.includes(type)) {

@@ -31,10 +31,7 @@ const injectContext = PassedComponent => {
 			 * state.actions.loadSomeData(); <---- calling this function from the flux.js actions
 			 *
 			 **/
-			const access_token = localStorage.getItem("access_token")
-			if (access_token) {
-				state.actions.fetchData("/user/");
-			}
+			state.actions.test_user_validation();
 			//eslint-disable-next-line
 		}, []);
 

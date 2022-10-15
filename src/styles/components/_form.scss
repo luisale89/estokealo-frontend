@@ -10,8 +10,6 @@
     }
     .invalid-tooltip {
         @include tooltip($color-danger);
-        right: 0%;
-        top: 110%;
     }
     span.show-password {
         position: absolute;
@@ -31,13 +29,21 @@
     position: relative;
     margin-bottom: 10px;
     label {
-        @include form-label($text-muted);
+        @include form-label($text-primary);
         font-size: 1em;
         max-width: 50%;
     }
     input {
-        @include form-input(#FFF, $color-bg, $text-muted);
+        @include form-input(#FFF, $color-bg, $text-primary);
         max-width: 50%;
+    }
+    select {
+        @include form-select(#FFF, $color-bg, $text-primary);
+        max-width: 50%;
+        &.empty-select {
+            color: $text-muted;
+            font-style: italic;
+        }
     }
     .invalid-tooltip {
         @include tooltip($color-danger);

@@ -8,6 +8,9 @@
     margin: 2px;
     cursor: pointer;
     transition: all 0.2s;
+    &.submit-btn{
+        width: 100%;
+    }
 }
 
 .btn-link {
