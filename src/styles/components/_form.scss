@@ -5,11 +5,14 @@
         @include form-label($text-primary);
         font-size: 1em;
     }
-    input {
-        @include form-input(#FFF, $color-bg, $text-primary);
-    }
-    .invalid-tooltip {
-        @include tooltip($color-danger);
+    .input-group{
+        position: relative;
+        input {
+            @include form-input(#FFF, $color-bg, $text-primary);
+        }
+        .invalid-tooltip {
+            @include tooltip($color-danger);
+        }
     }
     span.show-password {
         position: absolute;

@@ -8,12 +8,14 @@ import { Dashboard } from "./views/dashboard";
 //components
 import { SideNav } from "./components/side-nav";
 import { TopNav } from "./components/top-nav";
+import { Snackbar } from "./components/snackbar";
 
 
 export const Layout = () => {
     const { store } = useContext(Context);
     return (
         <div id="app-wrapper">
+            <Snackbar />
             {store.backdrop ? <div>backdrop</div> : 
             <Routes>
                 <Route path="/login" element={<LoginRouter />}></Route>

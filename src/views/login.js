@@ -38,7 +38,6 @@ export const Login = () => {
         });
 
         if (!valid) { // si no fueron validados los campos requeridos
-            console.log("formulario no cumple con las validaciones");
             return null;
         }
         if (userInfo.user) {
@@ -61,7 +60,7 @@ export const Login = () => {
                 } else if (result === 200) {
                     actions.login_user(payload);
                 }
-            })
+            });
         } else {
             //get user info
             actions.fetchData(`/auth/email-public-info?email=${form.fields[form_fields.email]}`)
@@ -103,21 +102,23 @@ export const Login = () => {
                     {/* email field */}
                     <div className="form-group">
                         <label htmlFor={form_fields.email}>Correo electrónico:</label>
-                        <span className={`invalid-tooltip ${form.feedback[form_fields.email].valid ? "valid" : "invalid"}`}>
-                            {form.feedback[form_fields.email].msg}
-                        </span>
-                        <input
-                            className={form.feedback[form_fields.email].valid ? "valid" : "invalid"}
-                            type="email" 
-                            placeholder="Ingesa tu correo electrónico" 
-                            name={form_fields.email}
-                            value={form.fields[form_fields.email]}
-                            onChange={handleInputChange}
-                            onKeyPress={noSpace}
-                            onBlur={checkField}
-                            disabled={store.loading || userInfo.user}
-                            required
-                        />
+                        <div className="input-group">
+                            <span className={`invalid-tooltip ${form.feedback[form_fields.email].valid ? "valid" : "invalid"}`}>
+                                {form.feedback[form_fields.email].msg}
+                            </span>
+                            <input
+                                className={form.feedback[form_fields.email].valid ? "valid" : "invalid"}
+                                type="email" 
+                                placeholder="Ingesa tu correo electrónico" 
+                                name={form_fields.email}
+                                value={form.fields[form_fields.email]}
+                                onChange={handleInputChange}
+                                onKeyPress={noSpace}
+                                onBlur={checkField}
+                                disabled={store.loading || userInfo.user}
+                                required
+                            />
+                        </div>
                     </div>
                     {/* company options field */}
                     {userInfo.companies ? 
@@ -140,21 +141,23 @@ export const Login = () => {
                     {userInfo.user ? 
                     <div className="form-group">
                         <label htmlFor={form_fields.password}>Contraseña:</label>
-                        <span className={`invalid-tooltip ${form.feedback[form_fields.password].valid ? "valid" : "invalid"}`}>
-                            {form.feedback[form_fields.password].msg}
-                        </span>
-                        <input
-                            className={form.feedback[form_fields.password].valid ? "valid" : "invalid"}
-                            type="password" 
-                            placeholder="Ingesa tu contraseña" 
-                            name={form_fields.password}
-                            value={form.fields[form_fields.password]}
-                            onChange={handleInputChange}
-                            onKeyPress={noSpace}
-                            onBlur={checkField}
-                            disabled={store.loading}
-                            required
-                        />
+                        <div className="input-group">
+                            <span className={`invalid-tooltip ${form.feedback[form_fields.password].valid ? "valid" : "invalid"}`}>
+                                {form.feedback[form_fields.password].msg}
+                            </span>
+                            <input
+                                className={form.feedback[form_fields.password].valid ? "valid" : "invalid"}
+                                type="password" 
+                                placeholder="Ingesa tu contraseña" 
+                                name={form_fields.password}
+                                value={form.fields[form_fields.password]}
+                                onChange={handleInputChange}
+                                onKeyPress={noSpace}
+                                onBlur={checkField}
+                                disabled={store.loading}
+                                required
+                            />
+                        </div>
                         <button 
                             className="btn-link"
                             type="button">

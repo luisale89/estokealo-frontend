@@ -6,7 +6,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
             userLoggedIn: false,
             loading: false,
-            backdrop: true
+            backdrop: true,
+            show_snackbar: false,
+            snackbar_text: "",
+            snackbar_timer_id: 0,
 		},
 		actions: {
             login_user: (payload={}) => {
@@ -28,6 +31,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                   localStorage.removeItem("access_token");
                   setStore({userLoggedIn: false, backdrop: true});
                }
+               return null;
+            },
+            hide_snackbar: () => {
+               setStore({show_snackbar: false, snackbar_text: ""});
+               const tid = sessionStorage.getItem("snackbar_timer");
+               if (tid) {
+                  clearTimeout(tid);
+                  sessionStorage.removeItem("snackbar_timer");
+               }
+               return null;
+            },
+            show_snackbar: () => {
+               const actions = getActions();
+               const timer_id = setTimeout(actions.hide_snackbar, 3000);
+               setStore({show_snackbar: true});
+               sessionStorage.setItem("snackbar_timer", timer_id);
                return null;
             },
             test_user_validation: () => {
@@ -84,7 +103,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                   return data
                })
                .catch(error => {
-                  setStore({loading: false, backdrop: false});
+                  actions.show_snackbar();
+                  setStore({
+                     loading: false, 
+                     backdrop: false, 
+                     snackbar_text: "Error de conexión. Intenta más tarde."
+                  });
                   return {result: 500, payload: error}
                });
                console.log("fetch finished");
