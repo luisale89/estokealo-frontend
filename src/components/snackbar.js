@@ -8,7 +8,10 @@ export const Snackbar = () => {
     const {store, actions} = useContext(Context);
 
     return (
-        <div id="snackbar" className={store.show_snackbar ? "show" : "hide"}>
+        <div 
+        id="snackbar" 
+        className={`${store.snackbar_type} ${store.show_snackbar ? "show" : "hide"}`}
+        >
             <button 
                 onClick={actions.hide_snackbar}
                 className="btn btn-link"

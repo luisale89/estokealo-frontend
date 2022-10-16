@@ -10,6 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             show_snackbar: false,
             snackbar_text: "",
             snackbar_timer_id: 0,
+            snackbar_type: "info" //info-success-warning-error
 		},
 		actions: {
             login_user: (payload={}) => {
@@ -42,10 +43,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                }
                return null;
             },
-            show_snackbar: () => {
+            show_snackbar: (text="hello", type="info") => {
                const actions = getActions();
                const timer_id = setTimeout(actions.hide_snackbar, 3000);
-               setStore({show_snackbar: true});
+               setStore({show_snackbar: true, snackbar_text: text, snackbar_type: type});
                sessionStorage.setItem("snackbar_timer", timer_id);
                return null;
             },
@@ -57,7 +58,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                   setStore({userLoggedIn: false, backdrop: false});
                } else {
                   setStore({backdrop: true});
-                  actions.fetchData("/user/")
+                  actions.fetchData("/auth/test-user-validation")
                   .then(data => {
                      //eslint-disable-next-line
                      const { result, payload } = data;
@@ -89,25 +90,21 @@ const getState = ({ getStore, getActions, setStore }) => {
                   if (!response.ok) {
                      if (response.status === 401) {
                         actions.logout_user();
+                        actions.show_snackbar("La sesión ha expirado", "info");
                      };
                   }
                   return response.json();
                })
                .then(data => {
-                  const {result, payload} = data
                   setStore({loading: false, backdrop: false});
-                  if (result === 404) {
-                     console.log(payload);
-                  }
                   //returs promise to caller
                   return data
                })
                .catch(error => {
-                  actions.show_snackbar();
+                  actions.show_snackbar("Error de conexión. Intenta más tarde.", "error");
                   setStore({
                      loading: false, 
-                     backdrop: false, 
-                     snackbar_text: "Error de conexión. Intenta más tarde."
+                     backdrop: false
                   });
                   return {result: 500, payload: error}
                });
