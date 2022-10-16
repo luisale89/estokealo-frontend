@@ -12,12 +12,14 @@ export const Snackbar = () => {
         id="snackbar" 
         className={`${store.snackbar_type} ${store.show_snackbar ? "show" : "hide"}`}
         >
-            <button 
-                onClick={actions.hide_snackbar}
-                className="btn btn-link"
-                >&times;
-            </button>
-            <span>{store.snackbar_text}</span>
+            <div className="snackbar-container">
+                <p>{store.snackbar_text}</p>
+                <button 
+                    onClick={actions.hide_snackbar}
+                    className="btn btn-close"
+                    >&times;
+                </button>
+            </div>
         </div>
     )
 }

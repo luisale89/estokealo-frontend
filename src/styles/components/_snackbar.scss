@@ -2,8 +2,6 @@
 #snackbar {
     min-width: 250px; /* Set a default minimum width */
     margin-left: -125px; /* Divide value of min-width by 2 */
-    background-color: #333; /* Black background color */
-    color: #fff; /* White text color */
     text-align: center; /* Centered text */
     border-radius: 10px; /* Rounded borders */
     padding: 0px 10px; /* Padding */
@@ -11,6 +9,37 @@
     z-index: 1; /* Add a z-index if needed */
     right: 30px; /* Center the snackbar */
     bottom: 30px; /* 30px from the bottom */
+
+    .snackbar-container {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        p {
+            margin: 10px;
+            font-size: 1em;
+            font-weight: 500;
+        }
+    }
+
+    &.info {
+        color: $text-white;
+        background-color: $color-info;
+    }
+
+    &.error {
+        background-color: $color-danger;
+        color: $text-white;
+    }
+
+    &.success {
+        background-color: $color-success;
+        color: $text-white;
+    }
+
+    &.warning {
+        background-color: $color-warning;
+        color: $text-white;
+    }
 
     &.hide {
         display: none;
