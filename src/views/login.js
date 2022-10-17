@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Context } from "../store/appContex";
 import { noSpace, validate_field, validateFormInputs } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
-import { AppModal } from "../components/modal";
+import { AppModal, openModalFromSibling } from "../components/modal";
 
 export const Login = () => {
 
@@ -19,7 +19,7 @@ export const Login = () => {
         fields: {
             [form_fields.email]: "",
             [form_fields.password]: "",
-            [form_fields.company]: ""
+            [form_fields.company]: "",
         },
         feedback: {
             [form_fields.email]: {valid: true, msg: ""},
@@ -99,37 +99,41 @@ export const Login = () => {
             <div className="form-container">
                 <h1>Estokealo</h1>
                 <p>Ingrese sus datos para iniciar sesión:</p>
-                <form id="signin-form" onSubmit={handleSubmit} noValidate autoComplete="on">
+                <form 
+                id="signin-form" 
+                onSubmit={handleSubmit} 
+                noValidate 
+                autoComplete="on">
                     {/* email field */}
-                    <div className="form-group">
-                        <label htmlFor={form_fields.email}>Correo electrónico:</label>
-                        <div className="input-group">
-                            <span className={`invalid-tooltip ${form.feedback[form_fields.email].valid ? "valid" : "invalid"}`}>
-                                {form.feedback[form_fields.email].msg}
-                            </span>
-                            <input
-                                className={form.feedback[form_fields.email].valid ? "valid" : "invalid"}
-                                type="email" 
-                                placeholder="Ingesa tu correo electrónico" 
-                                name={form_fields.email}
-                                value={form.fields[form_fields.email]}
-                                onChange={handleInputChange}
-                                onKeyPress={noSpace}
-                                onBlur={checkField}
-                                disabled={store.loading || userInfo.user}
-                                required
-                            />
+                    <div className="mb-3">
+                        <label htmlFor={form_fields.email} className="form-label">Correo electrónico:</label>
+                        <input
+                            className={`form-control ${form.feedback[form_fields.email].valid ? "" : "is-invalid"}`}
+                            type="email" 
+                            placeholder="Ingesa tu correo electrónico" 
+                            name={form_fields.email}
+                            value={form.fields[form_fields.email]}
+                            onChange={handleInputChange}
+                            onKeyPress={noSpace}
+                            onBlur={checkField}
+                            disabled={store.loading || userInfo.user}
+                            required
+                        />
+                        {/* {form.feedback[form_fields.email].valid ? null : 
+                        <div className="invalid-tooltip">{form.feedback[form_fields.email].msg}</div>} */}
+                        <div className={`invalid-feedback ${form.feedback[form_fields.email].valid ? "" : "invalid"}`}>
+                            {form.feedback[form_fields.email].msg}
                         </div>
                     </div>
                     {/* company options field */}
                     {userInfo.companies ? 
-                    <div className="form-inline-group">
-                        <label htmlFor={`company`}>Empresa:</label>
+                    <div className="mb-3">
+                        <label htmlFor="company" className="form-label">Empresa:</label>
                         <select 
                             value={form.fields[form_fields.company]} 
                             onChange={handleInputChange}
                             name={form_fields.company}
-                            className={form.fields[form_fields.company] ? "": "empty-select"}
+                            className="form-select"
                             >
                             <option value="">Entrar sin empresa...</option>
                             {userInfo.companies.map((item) => 
@@ -137,39 +141,46 @@ export const Login = () => {
                                 {item.name}
                             </option>)}
                         </select>
+                        <div id="companyHelp" class="form-text">
+                            Selecciona la empresa con la que deseas iniciar sesión.
+                        </div>
                     </div>: ""}
                     {/* password field */}
                     {userInfo.user ? 
-                    <div className="form-group">
-                        <label htmlFor={form_fields.password}>Contraseña:</label>
-                        <div className="input-group">
-                            <span className={`invalid-tooltip ${form.feedback[form_fields.password].valid ? "valid" : "invalid"}`}>
-                                {form.feedback[form_fields.password].msg}
-                            </span>
-                            <input
-                                className={form.feedback[form_fields.password].valid ? "valid" : "invalid"}
-                                type="password" 
-                                placeholder="Ingesa tu contraseña" 
-                                name={form_fields.password}
-                                value={form.fields[form_fields.password]}
-                                onChange={handleInputChange}
-                                onKeyPress={noSpace}
-                                onBlur={checkField}
-                                disabled={store.loading}
-                                required
-                            />
+                    <div className="mb-3">
+                        <label htmlFor={form_fields.password} className="form-label">Contraseña:</label>
+                        {/* <span className={`invalid-tooltip ${form.feedback[form_fields.password].valid ? "valid" : "invalid"}`}>
+                            {form.feedback[form_fields.password].msg}
+                        </span> */}
+                        <input
+                            className={`form-control ${form.feedback[form_fields.password].valid ? "" : "is-invalid"}`}
+                            type="password" 
+                            placeholder="Ingesa tu contraseña" 
+                            name={form_fields.password}
+                            value={form.fields[form_fields.password]}
+                            onChange={handleInputChange}
+                            onKeyPress={noSpace}
+                            onBlur={checkField}
+                            disabled={store.loading}
+                            required
+                        />
+                        <div className={`invalid-feedback ${form.feedback[form_fields.password].valid ? "" : "invalid"}`}>
+                            {form.feedback[form_fields.password].msg}
                         </div>
                         <button 
-                            className="btn-link"
-                            type="button">
-                                ¿Olvidaste tu contraseña?
+                        id="forgot-pw-link"
+                        className="btn btn-link mt-2"
+                        type="button">
+                            ¿Olvidaste tu contraseña?
                         </button>
+                        {/* {form.feedback[form_fields.password].valid ? null : 
+                        <div className="invalid-feedback">{form.feedback[form_fields.password].msg}</div>} */}
                     </div> : ""}
                     {/* submit button */}
                     <div className="submit-container">
                         {userInfo.user ? 
                         <button 
-                            className="btn btn-link"
+                            className="btn btn-outline-secondary"
                             type="button"
                             onClick={restartLogin}
                             disabled={store.loading}>
@@ -183,16 +194,23 @@ export const Login = () => {
                         </button>
                     </div>
                 </form>
-                <p className="btn-link">¿no tienes cuenta? crea una cuenta</p>
+                <p className="btn btn-link">¿no tienes cuenta? crea una cuenta</p>
             </div>
             <div className="side-container">
                 <span>{JSON.stringify(userInfo || "")}</span>
-                <AppModal 
-                    title="Aceptas?" 
+                <AppModal
+                    title="¿Aceptas?" 
                     body="Acepta los términos y condiciones" 
                     passedFunction={restartLogin}
-                    submitText="¿reiniciar?"
-                />
+                    submitText="¿reiniciar?">
+                        {/* modal opener as prop.children */}
+                        <button 
+                        id="restartForm-modal"
+                        className="btn btn-outline-primary"
+                        onClick={event => openModalFromSibling(event)}>
+                            modal opener test
+                        </button>
+                </AppModal>
             </div>
         </div>
     )

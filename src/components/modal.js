@@ -1,8 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { Modal } from "bootstrap";
 
-export const AppModal = ({title, body, submitText, passedFunction}) => {
+export const openModalFromSibling = (event) => {
+    document.getElementById(event.target.id).nextElementSibling.click(); //click modal opener
+    return null;
+}
 
+export const AppModal = (props) => {
+
+    const {title, body, submitText, passedFunction} = props;
     const [modal, setModal] = useState(null);
     const appModal = useRef();
 
@@ -20,13 +26,16 @@ export const AppModal = ({title, body, submitText, passedFunction}) => {
     }
 
     return (
-        <>
-            <button type="button" className="btn btn-primary" onClick={() => modal.show()}>
-                Lauch demo modal
-            </button>
-
-            <div className="modal fade" ref={appModal} tabIndex="-1" aria-labelledby="appModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+        <>  
+            {/* insert modal opener as first sibling*/}
+            {props.children} 
+            <span className="d-none" onClick={() => modal.show()}></span>
+            <div 
+            className="modal fade" 
+            ref={appModal}
+            tabIndex="-1" aria-labelledby="appModalLabel"
+            aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="appModalLabel">{title}</h5>
