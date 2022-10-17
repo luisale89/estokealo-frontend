@@ -17,8 +17,7 @@ export const Snackbar = () => {
                 <button 
                     onClick={actions.hide_snackbar}
                     className="btn btn-close"
-                    >&times;
-                </button>
+                    ></button>
             </div>
         </div>
     )

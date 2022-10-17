@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Context } from "../store/appContex";
 import { noSpace, validate_field, validateFormInputs } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
+import { AppModal } from "../components/modal";
 
 export const Login = () => {
 
@@ -186,6 +187,12 @@ export const Login = () => {
             </div>
             <div className="side-container">
                 <span>{JSON.stringify(userInfo || "")}</span>
+                <AppModal 
+                    title="Aceptas?" 
+                    body="Acepta los términos y condiciones" 
+                    passedFunction={restartLogin}
+                    submitText="¿reiniciar?"
+                />
             </div>
         </div>
     )

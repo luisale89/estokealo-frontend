@@ -32,6 +32,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                   localStorage.removeItem("access_token");
                   setStore({userLoggedIn: false, backdrop: true});
                }
+               actions.show_snackbar("sesion finalizada", "success");
                return null;
             },
             hide_snackbar: () => {
