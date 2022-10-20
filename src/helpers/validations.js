@@ -31,7 +31,7 @@ const validations  = {
             return {valid: true, msg: "ok"}
         }
 
-        return {valid: false, msg: "La contraseña ingresada es inválida"}
+        return {valid: false, msg: "La contraseña ingresada es insegura"}
     }
 };
 

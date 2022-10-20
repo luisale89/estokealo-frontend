@@ -1,0 +1,39 @@
+div#login-view {
+    .custom-app-logo {
+        text-align: center;
+    }
+    // @include flex-container($justify:flex-start, $items:center);
+    height: 100%;
+    .custom-form-container{
+        @include flex-container($direction: column, $justify: center);
+        height: 100%;
+        max-width: 600px;
+        div.custom-login-form {
+            padding: 10px;
+            margin: 10px;
+            overflow: scroll;
+            .custom-pw-container {
+                position: relative;
+                .custom-show-pw-button {
+                    top: 0px;
+                    right: 0px;
+                    position: absolute;
+                }
+            }
+        }
+        .custom-submit-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0px;
+            button.custom-submit-btn {
+                min-width: $submit-btn-min-with;
+            }
+        }
+    }
+    .custom-side-container{
+        background-color: $color-bg;
+        height: 100%;
+        overflow: scroll;
+    }
+}
