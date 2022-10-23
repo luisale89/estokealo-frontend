@@ -3,12 +3,13 @@ import { Route, Routes, Outlet, Navigate} from "react-router-dom";
 import injectContext from "./store/appContex";
 import { Context } from "./store/appContex";
 //views
-import { Login } from "./views/login";
+import { Auth } from "./views/auth";
 import { Dashboard } from "./views/dashboard";
 //components
 import { SideNav } from "./components/side-nav";
 import { TopNav } from "./components/top-nav";
 import { Snackbar } from "./components/snackbar";
+import { Login } from "./components/login";
 
 
 export const Layout = () => {
@@ -18,7 +19,10 @@ export const Layout = () => {
             <Snackbar />
             {store.backdrop ? <div>backdrop</div> : 
             <Routes>
-                <Route path="/login" element={<LoginRouter />}></Route>
+                <Route path="/auth" element={<AuthRouter />}>
+                    <Route path="/auth/login" element={<Login />}></Route> {/* This will render login component */}
+                    {/* <Route path="/signin" element={<Signin />}></Route>*/}
+                </Route>
                 <Route element={<LayoutRouter />}>
                     <Route path="/" element={<Navigate to="/dashboard" replace={true} />}></Route>
                     <Route path="/dashboard" element={<Dashboard />}></Route>
@@ -37,7 +41,7 @@ const LayoutRouter = () => {
     if (store.userLoggedIn) {
         // protected view
         return (
-            <div id="main">
+            <div id="main-app">
                 <TopNav />
                 <SideNav />
                 <Outlet />
@@ -45,16 +49,16 @@ const LayoutRouter = () => {
         )
     } else {
         return (
-            <Navigate to="/login" replace={true}/>
+            <Navigate to="/auth/login" replace={true}/>
         )
     }
 }
 
-const LoginRouter = () => {
+const AuthRouter = () => {
     const { store } = useContext(Context)
 
     if (!store.userLoggedIn) {
-        return <Login />
+        return <Auth />
         
     } else {
         return (

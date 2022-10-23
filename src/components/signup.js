@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { Context } from "../store/appContex";
 import { noSpace, validate_field, validateFormInputs } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
-import { AppModal, openModalFromSibling } from "../components/modal";
 
 export const Signup = () => {
 
@@ -100,14 +99,14 @@ export const Signup = () => {
     }
 
     return (
-        <div className="signin-view">
+        <div className="card custom-login-form mb-4">
             <div className="form-container">
                 <h1>Estokealo</h1>
                 <p>Ingrese sus datos para iniciar sesión:</p>
                 <form 
-                id="signin-form" 
+                id="signup-form" 
                 onSubmit={handleSubmit} 
-                noValidate 
+                noValidate
                 autoComplete="on">
                     {/* email field */}
                     <div className="mb-3">
@@ -199,23 +198,6 @@ export const Signup = () => {
                         </button>
                     </div>
                 </form>
-                <p className="btn btn-link">¿no tienes cuenta? crea una cuenta</p>
-            </div>
-            <div className="side-container">
-                <span>{JSON.stringify(userInfo || "")}</span>
-                <AppModal
-                    title="¿Aceptas?" 
-                    body="Acepta los términos y condiciones" 
-                    passedFunction={restartLogin}
-                    submitText="¿reiniciar?">
-                        {/* modal opener as prop.children */}
-                        <button 
-                        id="restartForm-modal"
-                        className="btn btn-outline-primary"
-                        onClick={event => openModalFromSibling(event)}>
-                            modal opener test
-                        </button>
-                </AppModal>
             </div>
         </div>
     )
