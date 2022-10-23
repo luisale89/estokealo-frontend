@@ -5,14 +5,18 @@ export const Auth = () => {
     return (
         <div id="auth-view" className="container-fluid">
             <div className="row h-100 justify-content-center">
-                <div className="custom-form-container col-lg-5">
-                    <div className="custom-app-logo">
+                <div className="custom-auth-container col-lg-5 p-0">
+                    <div className="custom-auth-header">
                         <h1>Estokealo</h1>
                     </div>
                     {/* Login o Signup, dependiendo del endpoint */}
-                    <Outlet/> 
-                    <div className="custom-login-footer">
-                        <h4>Footer</h4>
+                    <div className="custom-auth-content px-3">
+                        <Outlet/>
+                    </div>
+                    <div className="custom-auth-footer w-100 text-center bg-light pt-2 pb-2 border-top">
+                    <small>
+                        Made with <i className="bi bi-heart-fill"></i>
+                    </small>
                     </div>
                 </div>
                 <div className="custom-side-container d-none d-lg-block col-7">

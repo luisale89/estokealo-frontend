@@ -77,8 +77,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                       "Content-type": "application/json",
                       "Authorization": `Bearer ${access_token}`
                   },
-                  redirect: "error",
-                  mode: "cors"
+                  redirect: "error"
                };
                if (method === "PUT" || method === "POST") {
                      request_config = { ...request_config, body: JSON.stringify(body) }

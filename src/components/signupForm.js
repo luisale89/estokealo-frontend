@@ -2,31 +2,31 @@ import { useContext, useState } from "react";
 import { Context } from "../store/appContex";
 import { noSpace, validate_field, validateFormInputs } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
-import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const SignupForm = () => {
 
     const {store, actions} = useContext(Context);
     const [userInfo, setUserInfo] = useState({});
-    const navigate = useNavigate();
 
     const form_fields= {
         email: "user-email",
         password: "user-password",
-        company: "user-company",
-        showPassword: "show-password"
+        name: "user-first-name",
+        lname: "user-last-name"
     }
     
     const initialFormState = {
         fields: {
             [form_fields.email]: "",
             [form_fields.password]: "",
-            [form_fields.company]: "",
-            [form_fields.showPassword]: false
+            [form_fields.name]: "",
+            [form_fields.lname]: ""
         },
         feedback: {
             [form_fields.email]: {valid: true, msg: ""},
-            [form_fields.password]: {valid:true, msg: ""}
+            [form_fields.password]: {valid:true, msg: ""},
+            [form_fields.name]: {valid: true, msg: ""},
+            [form_fields.lname]: {valid: true, msg: ""}
         }
     }
 
@@ -35,16 +35,6 @@ export const Login = () => {
     const handleSubmit = (event) => { //event is the form that submit
         // se realiza validación de todos los requeridos y si todos son validos, se procede con el submit
         event.preventDefault();
-        const ele = document.getElementById(form_fields.password);
-        if (ele) {
-            ele.type = "password";
-            setForm({
-                fields: Object.assign(form.fields, 
-                    {[form_fields.showPassword]: false}),
-                ...form
-            });
-        }
-
         const {valid, feedback} = validateFormInputs(event.target.id, form.feedback) // valida todos los campos requeridos del formulario con id
         setForm({
             feedback: feedback,
@@ -70,23 +60,24 @@ export const Login = () => {
                             {[form_fields.password]: {valid:false, msg:"Contraseña incorrecta, intenta nuevamente"}}),
                         ...form
                     });
+                    return;
                 } else if (result === 200) {
                     actions.login_user(payload);
                 }
             });
         } else {
-            //get user-public-info
+            //get user info
             actions.fetchData(`/auth/email-public-info?email=${form.fields[form_fields.email]}`)
             .then(data =>{
                 const {result, payload} = data
                 if (result === 404) {
-                    //redirect to email validation, with next to signup.
-                    navigate(`/validate-email${"?email="+form.fields[form_fields.email]+"&next=signup"}`);
-                } else if (result === 200){
-                    setUserInfo(payload);
+                    //redirect to signup.
+                    console.log("nop");
                 };
+                setUserInfo(payload);
             });
-        };
+
+        }
         return null;
     };
 
@@ -108,15 +99,14 @@ export const Login = () => {
     }
 
     return (
-        <div className="card custom-login-form">
-            <h5 className="card-title text-center pt-4">Inicio de sesión: </h5>
-            <hr />
-            <div className="card-body">
+        <div className="card custom-login-form mb-4">
+            <div className="form-container">
+                <h1>Estokealo</h1>
                 <p>Ingrese sus datos para iniciar sesión:</p>
-                <form
-                id="signin-form" 
+                <form 
+                id="signup-form" 
                 onSubmit={handleSubmit} 
-                noValidate 
+                noValidate
                 autoComplete="on">
                     {/* email field */}
                     <div className="mb-3">
@@ -148,7 +138,6 @@ export const Login = () => {
                             onChange={handleInputChange}
                             name={form_fields.company}
                             className="form-select"
-                            disabled={store.loading}
                             >
                             <option value="">Entrar sin empresa...</option>
                             {userInfo.companies.map((item) => 
@@ -162,11 +151,14 @@ export const Login = () => {
                     </div>: ""}
                     {/* password field */}
                     {userInfo.user ? 
-                    <div className="mb-3 custom-pw-container">
+                    <div className="mb-3">
                         <label htmlFor={form_fields.password} className="form-label">Contraseña:</label>
+                        {/* <span className={`invalid-tooltip ${form.feedback[form_fields.password].valid ? "valid" : "invalid"}`}>
+                            {form.feedback[form_fields.password].msg}
+                        </span> */}
                         <input
                             className={`form-control ${form.feedback[form_fields.password].valid ? "" : "is-invalid"}`}
-                            type={form.fields[form_fields.showPassword] ? "text" : "password"} 
+                            type="password" 
                             placeholder="Ingesa tu contraseña" 
                             name={form_fields.password}
                             value={form.fields[form_fields.password]}
@@ -174,36 +166,22 @@ export const Login = () => {
                             onKeyPress={noSpace}
                             onBlur={checkField}
                             disabled={store.loading}
-                            id={form_fields.password}
                             required
                         />
                         <div className={`invalid-feedback ${form.feedback[form_fields.password].valid ? "" : "invalid"}`}>
                             {form.feedback[form_fields.password].msg}
                         </div>
-                        <div className="form-check form-switch custom-show-pw-button">
-                            <input 
-                            className="form-check-input" 
-                            type="checkbox"
-                            name= {form_fields.showPassword}
-                            checked= {form.fields[form_fields.showPassword]}
-                            onChange={handleInputChange}
-                            id="show-password-input" />
-                            <label className="form-check-label" htmlFor="show-password-input">
-                                mostrar contraseña
-                            </label>
-                        </div>
                         <button 
                         id="forgot-pw-link"
                         className="btn btn-link mt-2"
-                        type="button"
-                        disabled={store.loading}>
+                        type="button">
                             ¿Olvidaste tu contraseña?
                         </button>
                         {/* {form.feedback[form_fields.password].valid ? null : 
                         <div className="invalid-feedback">{form.feedback[form_fields.password].msg}</div>} */}
                     </div> : ""}
                     {/* submit button */}
-                    <div className="custom-submit-container">
+                    <div className="submit-container">
                         {userInfo.user ? 
                         <button 
                             className="btn btn-outline-secondary"
@@ -213,7 +191,7 @@ export const Login = () => {
                                 {`< atrás`}
                         </button> : ""}
                         <button 
-                            className="btn btn-primary submit-btn custom-submit-btn"
+                            className="btn btn-primary submit-btn"
                             type="submit"
                             disabled={store.loading}>
                                 {store.loading ? <span>Cargando...</span> : userInfo.user ? "Ingresar" : "Siguiente"}

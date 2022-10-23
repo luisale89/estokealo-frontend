@@ -9,7 +9,8 @@ import { Dashboard } from "./views/dashboard";
 import { SideNav } from "./components/side-nav";
 import { TopNav } from "./components/top-nav";
 import { Snackbar } from "./components/snackbar";
-import { Login } from "./components/login";
+import { LoginForm } from "./components/loginForm";
+import { SignupForm } from "./components/signupForm";
 
 
 export const Layout = () => {
@@ -20,15 +21,15 @@ export const Layout = () => {
             {store.backdrop ? <div>backdrop</div> : 
             <Routes>
                 <Route path="/auth" element={<AuthRouter />}>
-                    <Route path="/auth/login" element={<Login />}></Route> {/* This will render login component */}
-                    {/* <Route path="/signin" element={<Signin />}></Route>*/}
+                    <Route path="/auth/login" element={<LoginForm />}></Route> {/* This will render login component */}
+                    <Route path="/auth/signup" element={<SignupForm />}></Route>
                 </Route>
                 <Route element={<LayoutRouter />}>
                     <Route path="/" element={<Navigate to="/dashboard" replace={true} />}></Route>
                     <Route path="/dashboard" element={<Dashboard />}></Route>
                     <Route path="/about" element={<div><p>about...</p></div>}></Route>
                 </Route>
-                <Route path="*" element={<h1>not found...</h1>}></Route>
+                <Route path="*" element={<h1>not found view...</h1>}></Route>
             </Routes>
             }
         </div>

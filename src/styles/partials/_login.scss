@@ -1,16 +1,17 @@
 div#auth-view {
-    .custom-app-logo {
-        text-align: center;
-        padding-bottom: 20px;
-    }
     // @include flex-container($justify:flex-start, $items:center);
     height: 100%;
-    .custom-form-container{
+    .custom-auth-container{
         @include flex-container($direction: column, $justify: space-between, $items: center);
         height: 100%;
-        padding: 1rem;
-        div.custom-login-form {
+        div.custom-auth-header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        div.custom-auth-content {
             overflow: scroll;
+            width: 100%;
+            max-width: 500px;
             .custom-pw-container {
                 position: relative;
                 .custom-show-pw-button {
@@ -24,7 +25,7 @@ div#auth-view {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            margin: 20px 0px;
+            margin: 10px 0px;
             button.custom-submit-btn {
                 min-width: $submit-btn-min-with;
             }
