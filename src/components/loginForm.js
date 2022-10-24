@@ -115,7 +115,6 @@ export const LoginForm = () => {
                 <form
                 id="login-form" 
                 onSubmit={handleSubmit}
-                className="overflow-scroll"
                 noValidate 
                 autoComplete="on">
                     {/* email field */}
@@ -199,9 +198,7 @@ export const LoginForm = () => {
                         disabled={store.loading}>
                             ¿Olvidaste tu contraseña?
                         </button>
-                        {/* {form.feedback[form_fields.password].valid ? null : 
-                        <div className="invalid-feedback">{form.feedback[form_fields.password].msg}</div>} */}
-                    </div> : ""}
+                    </div> : null}
                     {/* submit button */}
                     <div className="custom-submit-container">
                         {userInfo.user ? 
@@ -211,7 +208,7 @@ export const LoginForm = () => {
                             onClick={restartLogin}
                             disabled={store.loading}>
                                 {`< atrás`}
-                        </button> : ""}
+                        </button> : null}
                         <button 
                             className="btn btn-primary submit-btn custom-submit-btn"
                             type="submit"

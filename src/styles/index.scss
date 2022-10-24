@@ -20,9 +20,8 @@ html, body {
 
 //components
 // @import "./components/buttons";
-@import "./components/form";
 @import "./components/snackbar";
 //partials
-@import "./partials/login";
+@import "./partials/auth";
 //bootstrap
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";

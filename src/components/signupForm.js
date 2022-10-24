@@ -5,28 +5,33 @@ import { handleChange } from "../helpers/handlers";
 
 export const SignupForm = () => {
 
+    //eslint-disable-next-line
     const {store, actions} = useContext(Context);
-    const [userInfo, setUserInfo] = useState({});
 
     const form_fields= {
         email: "user-email",
         password: "user-password",
-        name: "user-first-name",
-        lname: "user-last-name"
+        re_password: "user-repeated-password",
+        first_name: "user-first-name",
+        last_name: "user-last-name",
+        showPassword: "show-password-btn"
     }
     
     const initialFormState = {
         fields: {
             [form_fields.email]: "",
             [form_fields.password]: "",
-            [form_fields.name]: "",
-            [form_fields.lname]: ""
+            [form_fields.re_password]: "",
+            [form_fields.first_name]: "",
+            [form_fields.last_name]: "",
+            [form_fields.showPassword]: ""
         },
         feedback: {
             [form_fields.email]: {valid: true, msg: ""},
             [form_fields.password]: {valid:true, msg: ""},
-            [form_fields.name]: {valid: true, msg: ""},
-            [form_fields.lname]: {valid: true, msg: ""}
+            [form_fields.re_password]: {valid:true, msg: ""},
+            [form_fields.first_name]: {valid: true, msg: ""},
+            [form_fields.last_name]: {valid: true, msg: ""}
         }
     }
 
@@ -44,40 +49,6 @@ export const SignupForm = () => {
         if (!valid) { // si no fueron validados los campos requeridos
             return null;
         }
-        if (userInfo.user) {
-            //login user
-            let body = {
-                email: form.fields[form_fields.email],
-                password: form.fields[form_fields.password]
-            };
-            actions.fetchData(`/auth/login`, "POST", body)
-            .then(data => {
-                const { result, payload } = data
-
-                if (result === 403) {
-                    setForm({
-                        feedback: Object.assign(form.feedback, 
-                            {[form_fields.password]: {valid:false, msg:"Contraseña incorrecta, intenta nuevamente"}}),
-                        ...form
-                    });
-                    return;
-                } else if (result === 200) {
-                    actions.login_user(payload);
-                }
-            });
-        } else {
-            //get user info
-            actions.fetchData(`/auth/email-public-info?email=${form.fields[form_fields.email]}`)
-            .then(data =>{
-                const {result, payload} = data
-                if (result === 404) {
-                    //redirect to signup.
-                    console.log("nop");
-                };
-                setUserInfo(payload);
-            });
-
-        }
         return null;
     };
 
@@ -93,23 +64,41 @@ export const SignupForm = () => {
         setForm({feedback: validate_field(event, form.feedback), ...form});
     };
 
-    const restartLogin = () => {
-        setForm(initialFormState);
-        setUserInfo({});
-    }
-
     return (
-        <div className="card custom-login-form mb-4">
-            <div className="form-container">
-                <h1>Estokealo</h1>
-                <p>Ingrese sus datos para iniciar sesión:</p>
-                <form 
-                id="signup-form" 
-                onSubmit={handleSubmit} 
-                noValidate
+        <div className="card">
+            <h5 className="card-title text-center pt-2">Crear una cuenta: </h5>
+            <div className="card-body">
+                <p>Ingrese sus datos para crear una cuenta:</p>
+                <form
+                id="signin-form" 
+                onSubmit={handleSubmit}
+                noValidate 
                 autoComplete="on">
+                    <div className="input-group mb-2">
+                        <span className="input-group-text">Nombre | Apellido</span>
+                        <input 
+                            type="text" 
+                            aria-label="First name" 
+                            className={`form-control ${form.feedback[form_fields.first_name].valid ? "" : "is-invalid"}`}
+                            name={form_fields.first_name}
+                            value={form.fields[form_fields.first_name]}
+                            onChange={handleInputChange}
+                            onBlur={checkField}
+                            disabled={store.loading}
+                            required/>
+                        <input 
+                            type="text" 
+                            aria-label="Last name" 
+                            className={`form-control ${form.feedback[form_fields.last_name].valid ? "" : "is-invalid"}`}
+                            name={form_fields.last_name}
+                            value={form.fields[form_fields.last_name]}
+                            onChange={handleInputChange}
+                            onBlur={checkField}
+                            disabled={store.loading}
+                            required/>
+                    </div>
                     {/* email field */}
-                    <div className="mb-3">
+                    <div className="mb-2 p-1">
                         <label htmlFor={form_fields.email} className="form-label">Correo electrónico:</label>
                         <input
                             className={`form-control ${form.feedback[form_fields.email].valid ? "" : "is-invalid"}`}
@@ -120,45 +109,19 @@ export const SignupForm = () => {
                             onChange={handleInputChange}
                             onKeyPress={noSpace}
                             onBlur={checkField}
-                            disabled={store.loading || userInfo.user}
+                            disabled={store.loading}
                             required
                         />
-                        {/* {form.feedback[form_fields.email].valid ? null : 
-                        <div className="invalid-tooltip">{form.feedback[form_fields.email].msg}</div>} */}
                         <div className={`invalid-feedback ${form.feedback[form_fields.email].valid ? "" : "invalid"}`}>
                             {form.feedback[form_fields.email].msg}
                         </div>
                     </div>
-                    {/* company options field */}
-                    {userInfo.companies ? 
-                    <div className="mb-3">
-                        <label htmlFor="company" className="form-label">Empresa:</label>
-                        <select 
-                            value={form.fields[form_fields.company]} 
-                            onChange={handleInputChange}
-                            name={form_fields.company}
-                            className="form-select"
-                            >
-                            <option value="">Entrar sin empresa...</option>
-                            {userInfo.companies.map((item) => 
-                            <option key={item.ID} value={item.name}>
-                                {item.name}
-                            </option>)}
-                        </select>
-                        <div id="companyHelp" className="form-text">
-                            Selecciona la empresa con la que deseas iniciar sesión.
-                        </div>
-                    </div>: ""}
                     {/* password field */}
-                    {userInfo.user ? 
-                    <div className="mb-3">
+                    <div className="mb-2 custom-pw-container p-1">
                         <label htmlFor={form_fields.password} className="form-label">Contraseña:</label>
-                        {/* <span className={`invalid-tooltip ${form.feedback[form_fields.password].valid ? "valid" : "invalid"}`}>
-                            {form.feedback[form_fields.password].msg}
-                        </span> */}
                         <input
                             className={`form-control ${form.feedback[form_fields.password].valid ? "" : "is-invalid"}`}
-                            type="password" 
+                            type={form.fields[form_fields.showPassword] ? "text" : "password"} 
                             placeholder="Ingesa tu contraseña" 
                             name={form_fields.password}
                             value={form.fields[form_fields.password]}
@@ -166,35 +129,59 @@ export const SignupForm = () => {
                             onKeyPress={noSpace}
                             onBlur={checkField}
                             disabled={store.loading}
+                            id={form_fields.password}
                             required
                         />
                         <div className={`invalid-feedback ${form.feedback[form_fields.password].valid ? "" : "invalid"}`}>
                             {form.feedback[form_fields.password].msg}
                         </div>
-                        <button 
-                        id="forgot-pw-link"
-                        className="btn btn-link mt-2"
-                        type="button">
-                            ¿Olvidaste tu contraseña?
-                        </button>
-                        {/* {form.feedback[form_fields.password].valid ? null : 
-                        <div className="invalid-feedback">{form.feedback[form_fields.password].msg}</div>} */}
-                    </div> : ""}
+                        <div className="form-check form-switch custom-show-pw-button">
+                            <input
+                            className="form-check-input" 
+                            type="checkbox"
+                            name= {form_fields.showPassword}
+                            checked= {form.fields[form_fields.showPassword]}
+                            onChange={handleInputChange}
+                            id="show-password-input" />
+                            <label className="form-check-label" htmlFor="show-password-input">
+                                mostrar contraseña
+                            </label>
+                        </div>
+                    </div>
+                    {/* password field */}
+                    <div className="mb-2 custom-pw-container p-1">
+                        <label htmlFor={form_fields.re_password} className="form-label">Reingresa tu contraseña:</label>
+                        <input
+                            className={`form-control ${form.feedback[form_fields.re_password].valid ? "" : "is-invalid"}`}
+                            type={form.fields[form_fields.showPassword] ? "text" : "password"} 
+                            placeholder="Ingesa tu contraseña" 
+                            name={form_fields.re_password}
+                            value={form.fields[form_fields.re_password]}
+                            onChange={handleInputChange}
+                            onKeyPress={noSpace}
+                            onBlur={checkField}
+                            disabled={store.loading}
+                            id={form_fields.re_password}
+                            required
+                        />
+                        <div className={`invalid-feedback ${form.feedback[form_fields.re_password].valid ? "" : "invalid"}`}>
+                            {form.feedback[form_fields.re_password].msg}
+                        </div>
+                    </div>
                     {/* submit button */}
-                    <div className="submit-container">
-                        {userInfo.user ? 
+                    <div className="custom-submit-container">
                         <button 
                             className="btn btn-outline-secondary"
                             type="button"
-                            onClick={restartLogin}
+                            onClick={() => {window.history.back()}}
                             disabled={store.loading}>
                                 {`< atrás`}
-                        </button> : ""}
+                        </button>
                         <button 
-                            className="btn btn-primary submit-btn"
+                            className="btn btn-primary submit-btn custom-submit-btn"
                             type="submit"
                             disabled={store.loading}>
-                                {store.loading ? <span>Cargando...</span> : userInfo.user ? "Ingresar" : "Siguiente"}
+                                {store.loading ? <span>Cargando...</span> : "Siguiente"}
                         </button>
                     </div>
                 </form>
