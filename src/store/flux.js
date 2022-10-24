@@ -68,9 +68,13 @@ const getState = ({ getStore, getActions, setStore }) => {
                }
                return null;
             },
-            fetchData: (url="", method="GET", body={}, parameters="") => {
+            fetchData: (url="", method="GET", body={}, custom_access_token=null) => {
                const actions = getActions();
-               const access_token = localStorage.getItem("access_token");
+               let access_token = localStorage.getItem("access_token");
+               if (custom_access_token) {
+                  //custom access token
+                  access_token = custom_access_token
+               }
                let request_config = {
                   method: method,
                   headers: {
@@ -84,7 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                };
                setStore({loading: true});
                //fetch
-               const response = fetch(`${api_base_url}${url}${parameters}`, request_config)
+               const response = fetch(`${api_base_url}${url}`, request_config)
                .then(response => {
                   //when response is resolved
                   if (!response.ok) {

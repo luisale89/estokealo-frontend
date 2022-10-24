@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContex";
 import { noSpace, validate_field, validateFormInputs, codeRestrict } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
+import PropTypes from "prop-types";
 
 export const VerifyEmail = (props) => {
 
@@ -25,7 +26,8 @@ export const VerifyEmail = (props) => {
     }
 
     const [form, setForm] = useState(initialFormState);
-    const [codeSend, setCodeSend] = useState(false);
+    //eslint-disable-next-line
+    const [codeSent, setCodeSent] = useState(false);
 
     const handleSubmit = (event) => { //event is the form that submit
         // se realiza validación de todos los requeridos y si todos son validos, se procede con el submit
@@ -36,10 +38,37 @@ export const VerifyEmail = (props) => {
             ...form
         });
 
-        if (valid) { // si fueron validados los campos requeridos
-            props.callback(); //ejecuta el callback pasado en props
+        if (!valid) { // si no fueron validados los campos requeridos
+            return null;
         }
-        return null;
+        if (!codeSent) {
+            actions.fetchData(`/auth/email-validation?email=${form.fields[form_fields.email]}`, "GET")
+            .then(data => {
+                const { result, payload } = data
+                console.log(payload);
+                if (result === 200) {
+                    sessionStorage.setItem("verification_token", payload.verification_token);
+                    setCodeSent(true);
+                }
+                return null;
+            });
+        } else {
+            const body = {
+                "verification_code": parseInt(form.fields[form_fields.code])
+            }
+            const access_t = sessionStorage.getItem("verification_token");
+            actions.fetchData(`/auth/email-validation?email=${form.fields[form_fields.email]}`, "PUT", body, access_t)
+            .then(data => {
+                const { result, payload } = data
+                console.log(payload);
+                if (result === 200) {
+                    sessionStorage.removeItem("verification_token");
+                    sessionStorage.setItem("verified_token", payload.verified_token);
+                    props.callback(); //ejecuta funcion pasada como prop.
+                }
+                return null;
+            });
+        }
     };
 
     const handleInputChange = (event) => {
@@ -55,6 +84,9 @@ export const VerifyEmail = (props) => {
     };
 
     useEffect(() => {
+        //clear sessionStorage
+        sessionStorage.removeItem("verification_token");
+        sessionStorage.removeItem("verified_token");
         // if an email has been set in the query params, set the state.
         const params = new URLSearchParams(window.location.search);
         if (params.has("email")) {
@@ -64,7 +96,7 @@ export const VerifyEmail = (props) => {
                 ...form
             });
         }
-        
+    //eslint-disable-next-line
     }, []);
 
     return (
@@ -97,7 +129,7 @@ export const VerifyEmail = (props) => {
                         </div>
                     </div>
                     {/* code field */}
-                    {!codeSend ? 
+                    {codeSent ? 
                     <div className="mb-2 p-1">
                         <label htmlFor={form_fields.code} className="form-label">Código de 6 dígitos:</label>
                         <div id="codeHelp" className="form-text">
@@ -134,11 +166,16 @@ export const VerifyEmail = (props) => {
                             className="btn btn-primary submit-btn custom-submit-btn"
                             type="submit"
                             disabled={store.loading}>
-                                {store.loading ? <span>Cargando...</span> : codeSend ? "Siguiente" : "Enviar código"}
+                                {store.loading ? <span>Cargando...</span> : codeSent ? "Siguiente" : "Enviar código"}
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     )
+}
+
+
+VerifyEmail.propTypes = {
+    callback: PropTypes.func
 }

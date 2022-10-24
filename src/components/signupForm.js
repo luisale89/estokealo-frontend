@@ -81,7 +81,8 @@ export const SignupForm = () => {
                             <span className="input-group-text">Nombre | Apellido</span>
                             <input 
                                 type="text" 
-                                aria-label="First name" 
+                                aria-label="First name"
+                                placeholder="Nombre"
                                 className={`form-control ${form.feedback[form_fields.first_name].valid ? "" : "is-invalid"}`}
                                 name={form_fields.first_name}
                                 value={form.fields[form_fields.first_name]}
@@ -92,6 +93,7 @@ export const SignupForm = () => {
                             <input 
                                 type="text" 
                                 aria-label="Last name" 
+                                placeholder="Apellido"
                                 className={`form-control ${form.feedback[form_fields.last_name].valid ? "" : "is-invalid"}`}
                                 name={form_fields.last_name}
                                 value={form.fields[form_fields.last_name]}
