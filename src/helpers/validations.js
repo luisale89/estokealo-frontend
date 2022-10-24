@@ -80,3 +80,10 @@ export const noSpace = (event) => {
         event.preventDefault();
     }
 }
+
+export const codeRestrict = (event) => {
+    const max_length = 6;
+    if (event.charCode === 32 || event.target.value.length > max_length - 1) {
+        event.preventDefault();
+    }
+}

@@ -111,7 +111,7 @@ export const LoginForm = () => {
         <div className="card">
             <h5 className="card-title text-center pt-2">Inicio de sesión: </h5>
             <div className="card-body">
-                <p>Ingrese sus datos para iniciar sesión:</p>
+                <p className="text-secondary">Ingrese sus datos para iniciar sesión:</p>
                 <form
                 id="login-form" 
                 onSubmit={handleSubmit}

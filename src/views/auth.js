@@ -28,7 +28,7 @@ export const Auth = () => {
                     </div>
                     <div className="carousel-inner">
                         <div className="carousel-item active">
-                            <img src="https://http.cat/400" className="d-block w-100" alt="..."/>
+                            <img src="https://http.cat/401" className="d-block w-100" alt="..."/>
                         </div>
                         <div className="carousel-item">
                             <img src="https://http.cat/200" className="d-block w-100" alt="..."/>
