@@ -16,8 +16,7 @@ export const TopNav = () => {
                 title={"Cierre de Sesión"} 
                 body="¿Deseas finalizar la sesión?"
                 submitText="Finalizar sesión"
-                launcherTitle="cerrar sesión"
-                passedFunction={actions.logout_user}
+                callBack={actions.logout_user}
             >
                 {/* modal opener as prop.children */}
                 <button 

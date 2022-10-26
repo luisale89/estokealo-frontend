@@ -12,7 +12,7 @@ Cada función retorna un objeto igual al state, que luego será actualizado en l
 const handled_validations = ["email", "password"]; // tipos de inputs que se están validando.
 
 // estas son las validaciones..
-const validations  = {
+export const validations = {
     email: (email) => { // cuando el tipo del campo a ser validado es email.
         const reEmail = /\S+@\S+\.\S+/; //expresion regular para verificar email.
 

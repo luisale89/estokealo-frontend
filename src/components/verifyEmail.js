@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContex";
-import { noSpace, validate_field, validateFormInputs, codeRestrict } from "../helpers/validations";
+import { validate_field, validateFormInputs, codeRestrict } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
 import PropTypes from "prop-types";
 
@@ -10,29 +10,25 @@ export const VerifyEmail = (props) => {
     const {store, actions} = useContext(Context);
 
     const form_fields= {
-        email: "user-email",
         code: "six-digit-code"
     }
     
     const initialFormState = {
         fields: {
-            [form_fields.email]: "",
             [form_fields.code]: ""
         },
         feedback: {
-            [form_fields.email]: {valid: true, msg: ""},
             [form_fields.code]: {valid:true, msg: ""}
         }
     }
 
     const [form, setForm] = useState(initialFormState);
-    //eslint-disable-next-line
     const [codeSent, setCodeSent] = useState(false);
 
     const handleSubmit = (event) => { //event is the form that submit
         // se realiza validación de todos los requeridos y si todos son validos, se procede con el submit
         event.preventDefault();
-        const {valid, feedback} = validateFormInputs(event.target.id, form.feedback) // valida todos los campos requeridos del formulario con id
+        let {valid, feedback} = validateFormInputs(event.target.id, form.feedback) // valida todos los campos requeridos del formulario con id
         setForm({
             feedback: feedback,
             ...form
@@ -42,7 +38,7 @@ export const VerifyEmail = (props) => {
             return null;
         }
         if (!codeSent) {
-            actions.fetchData(`/auth/email-validation?email=${form.fields[form_fields.email]}`, "GET")
+            actions.fetchData(`/auth/email-validation?email=${props.email}`, "GET")
             .then(data => {
                 const { result, payload } = data
                 console.log(payload);
@@ -57,14 +53,14 @@ export const VerifyEmail = (props) => {
                 "verification_code": parseInt(form.fields[form_fields.code])
             }
             const access_t = sessionStorage.getItem("verification_token");
-            actions.fetchData(`/auth/email-validation?email=${form.fields[form_fields.email]}`, "PUT", body, access_t)
+            actions.fetchData("/auth/email-validation", "PUT", body, access_t)
             .then(data => {
                 const { result, payload } = data
                 console.log(payload);
                 if (result === 200) {
                     sessionStorage.removeItem("verification_token");
                     sessionStorage.setItem("verified_token", payload.verified_token);
-                    props.callback(); //ejecuta funcion pasada como prop.
+                    props.callback?.(); //ejecuta funcion pasada como prop.
                 }
                 return null;
             });
@@ -85,55 +81,28 @@ export const VerifyEmail = (props) => {
 
     useEffect(() => {
         //clear sessionStorage
-        sessionStorage.removeItem("verification_token");
-        sessionStorage.removeItem("verified_token");
-        // if an email has been set in the query params, set the state.
-        const params = new URLSearchParams(window.location.search);
-        if (params.has("email")) {
-            setForm({
-                fields: Object.assign(form.fields, 
-                    {[form_fields.email]: params.get("email")}),
-                ...form
-            });
-        }
-    //eslint-disable-next-line
+        window.sessionStorage.removeItem("verification_token");
+        window.sessionStorage.removeItem("verified_token");
+
     }, []);
 
     return (
         <div className="card">
             <h5 className="card-title text-center pt-2">Verifica de tu dirección de correo electrónico: </h5>
             <div className="card-body">
-                <p className="text-secondary">Se enviará un código de 6 dígitos a tu dirección de correo electrónico.</p>
+                <p className="text-secondary">Se enviará un código de 6 dígitos a la dirección de 
+                correo electrónico: <strong>{props.email}</strong></p>
                 <form
                 id="verification-form" 
                 onSubmit={handleSubmit}
                 noValidate
                 autoComplete="on">
-                    {/* email field */}
-                    <div className="mb-2 p-1">
-                        <label htmlFor={form_fields.email} className="form-label">Correo electrónico:</label>
-                        <input
-                            className={`form-control ${form.feedback[form_fields.email].valid ? "" : "is-invalid"}`}
-                            type="email" 
-                            placeholder="Ingesa tu correo electrónico" 
-                            name={form_fields.email}
-                            value={form.fields[form_fields.email]}
-                            onChange={handleInputChange}
-                            onKeyPress={noSpace}
-                            onBlur={checkField}
-                            disabled={store.loading}
-                            required
-                        />
-                        <div className={`invalid-feedback ${form.feedback[form_fields.email].valid ? "" : "invalid"}`}>
-                            {form.feedback[form_fields.email].msg}
-                        </div>
-                    </div>
                     {/* code field */}
                     {codeSent ? 
                     <div className="mb-2 p-1">
                         <label htmlFor={form_fields.code} className="form-label">Código de 6 dígitos:</label>
                         <div id="codeHelp" className="form-text">
-                            Ingresa el código de 6 dígitos enviado a tu correo electrónico
+                            Ingresa el código de 6 dígitos enviado a tu correo electrónico para validarlo:
                         </div>
                         <input
                             className={`form-control ${form.feedback[form_fields.code].valid ? "" : "is-invalid"}`}
@@ -166,7 +135,7 @@ export const VerifyEmail = (props) => {
                             className="btn btn-primary submit-btn custom-submit-btn"
                             type="submit"
                             disabled={store.loading}>
-                                {store.loading ? <span>Cargando...</span> : codeSent ? "Siguiente" : "Enviar código"}
+                                {store.loading ? <span>Cargando...</span> : codeSent ? "Validar código" : "Enviar código"}
                         </button>
                     </div>
                 </form>
@@ -177,5 +146,6 @@ export const VerifyEmail = (props) => {
 
 
 VerifyEmail.propTypes = {
+    email: PropTypes.string,
     callback: PropTypes.func
 }

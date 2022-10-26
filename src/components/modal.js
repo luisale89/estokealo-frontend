@@ -8,7 +8,7 @@ export const openModalFromSibling = (event) => {
 
 export const AppModal = (props) => {
 
-    const {title, body, submitText, passedFunction} = props;
+    const {title, body, submitText, callback} = props;
     const [modal, setModal] = useState(null);
     const appModal = useRef();
 
@@ -18,9 +18,9 @@ export const AppModal = (props) => {
         )
     }, []);
 
-    const executePassedFunction = () => {
-        // passedFunction;
-        passedFunction();
+    const executeCallback = () => {
+        // callback;
+        callback();
         modal.hide();
         return null;
     }
@@ -44,7 +44,7 @@ export const AppModal = (props) => {
                         <div className="modal-body">{body}</div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" onClick={() => modal.hide()}>Cerrar</button>
-                            <button type="button" className="btn btn-primary" onClick={executePassedFunction}>{submitText}</button>
+                            <button type="button" className="btn btn-primary" onClick={executeCallback}>{submitText}</button>
                         </div>
                     </div>
                 </div>

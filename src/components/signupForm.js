@@ -1,14 +1,17 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContex";
 import { noSpace, validate_field, validateFormInputs } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
 import { VerifyEmail } from "./verifyEmail";
+import { useNavigate } from "react-router-dom";
+import { validations } from "../helpers/validations";
 
 export const SignupForm = () => {
 
     //eslint-disable-next-line
     const {store, actions} = useContext(Context);
     const [emailVerified, setEmailVerified] = useState(false)
+    const navigate = useNavigate();
 
     const form_fields= {
         email: "user-email",
@@ -38,6 +41,22 @@ export const SignupForm = () => {
     }
 
     const [form, setForm] = useState(initialFormState);
+    useEffect(() => {
+        // if an email has been set in the query params, set the state.
+        const params = new URLSearchParams(window.location.search);
+        const email_in_params = params.get("email");
+        const { valid, feedback } = validations["email"](email_in_params);
+        if (!valid) {
+            navigate("/auth/login");
+        } else {
+            setForm({
+                fields: Object.assign(form.fields, 
+                    {[form_fields.email]: email_in_params}),
+                ...form
+            });
+        }
+    //eslint-disable-next-line
+    }, []);
 
     const handleSubmit = (event) => { //event is the form that submit
         // se realiza validación de todos los requeridos y si todos son validos, se procede con el submit
@@ -77,6 +96,7 @@ export const SignupForm = () => {
                     onSubmit={handleSubmit}
                     noValidate 
                     autoComplete="on">
+                        {/* name | lastname field */}
                         <div className="input-group mb-2">
                             <span className="input-group-text">Nombre | Apellido</span>
                             <input 
@@ -114,8 +134,8 @@ export const SignupForm = () => {
                                 onChange={handleInputChange}
                                 onKeyPress={noSpace}
                                 onBlur={checkField}
-                                disabled={store.loading}
-                                required
+                                disabled
+                                readOnly
                             />
                             <div className={`invalid-feedback ${form.feedback[form_fields.email].valid ? "" : "invalid"}`}>
                                 {form.feedback[form_fields.email].msg}
@@ -194,6 +214,6 @@ export const SignupForm = () => {
             </div>
         )
     } else {
-        return <VerifyEmail callback={() => {setEmailVerified(true)}}/>
+        return <VerifyEmail email={form.fields[form_fields.email]} callback={() => {setEmailVerified(true)}}/>
     }
 }
