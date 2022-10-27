@@ -20,7 +20,7 @@ export const AppModal = (props) => {
 
     const executeCallback = () => {
         // callback;
-        callback();
+        callback?.();
         modal.hide();
         return null;
     }

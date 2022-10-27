@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContex";
 import { validate_field, validateFormInputs, codeRestrict } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
-import PropTypes from "prop-types";
 
 export const VerifyEmail = (props) => {
 
@@ -142,10 +141,4 @@ export const VerifyEmail = (props) => {
             </div>
         </div>
     )
-}
-
-
-VerifyEmail.propTypes = {
-    email: PropTypes.string,
-    callback: PropTypes.func
 }

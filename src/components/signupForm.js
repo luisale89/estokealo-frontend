@@ -41,13 +41,18 @@ export const SignupForm = () => {
     }
 
     const [form, setForm] = useState(initialFormState);
+    //ComponentDidMount
     useEffect(() => {
         // if an email has been set in the query params, set the state.
         const params = new URLSearchParams(window.location.search);
         const email_in_params = params.get("email");
         const { valid, feedback } = validations["email"](email_in_params);
+        console.log(feedback);
+        //invalid email
         if (!valid) {
-            navigate("/auth/login");
+            actions.show_snackbar("email inválido en URL", "error");
+            navigate("/auth/login", {replace: true});
+        //email validated
         } else {
             setForm({
                 fields: Object.assign(form.fields, 
@@ -70,6 +75,7 @@ export const SignupForm = () => {
         if (!valid) { // si no fueron validados los campos requeridos
             return null;
         }
+        //enviar datos para crear cuenta <- development
         return null;
     };
 
@@ -214,6 +220,9 @@ export const SignupForm = () => {
             </div>
         )
     } else {
-        return <VerifyEmail email={form.fields[form_fields.email]} callback={() => {setEmailVerified(true)}}/>
+        return <VerifyEmail 
+            email={form.fields[form_fields.email]} 
+            callback={() => {setEmailVerified(true)}}
+        />
     }
 }

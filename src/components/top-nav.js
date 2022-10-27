@@ -12,15 +12,15 @@ export const TopNav = () => {
         <div id="top-nav">
             <div>TopNav component</div>
             <span>search field</span>
-            <AppModal 
+            <AppModal
                 title={"Cierre de Sesión"} 
                 body="¿Deseas finalizar la sesión?"
                 submitText="Finalizar sesión"
-                callBack={actions.logout_user}
+                callback={actions.logout_user}
             >
                 {/* modal opener as prop.children */}
                 <button 
-                id="closeSession-modal"
+                id="close-session-modal"
                 className="btn btn-outline-primary"
                 onClick={event => openModalFromSibling(event)}>
                     modal opener
