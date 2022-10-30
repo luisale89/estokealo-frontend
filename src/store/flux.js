@@ -16,7 +16,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             /*
             login_function
                */
-            localStorage.setItem("access_token", payload.accessToken);
+            localStorage.setItem("access_token", payload.access_token);
             setStore({userLoggedIn: true});
             return null;
          },
@@ -113,7 +113,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                });
                return {result: 500, payload: error}
             });
-            console.log("fetch finished");
             //return promise
             return response
          },

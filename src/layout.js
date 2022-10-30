@@ -11,6 +11,7 @@ import { TopNav } from "./components/top-nav";
 import { Snackbar } from "./components/snackbar";
 import { LoginForm } from "./components/loginForm";
 import { SignupForm } from "./components/signupForm";
+import { RestartPassword } from "./components/restartPassword";
 
 
 export const Layout = () => {
@@ -23,6 +24,7 @@ export const Layout = () => {
                 <Route path="/auth" element={<AuthRouter />}>
                     <Route path="/auth/login" element={<LoginForm />}></Route> {/* This will render login component */}
                     <Route path="/auth/signup" element={<SignupForm />}></Route>
+                    <Route path="/auth/restart-password" element={<RestartPassword />}></Route>
                 </Route>
                 <Route element={<LayoutRouter />}>
                     <Route path="/" element={<Navigate to="/dashboard" replace={true} />}></Route>

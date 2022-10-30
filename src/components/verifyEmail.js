@@ -40,7 +40,6 @@ export const VerifyEmail = (props) => {
             actions.fetchData(`/auth/email-validation?email=${props.email}`, "GET")
             .then(data => {
                 const { result, payload } = data
-                console.log(payload);
                 if (result === 200) {
                     sessionStorage.setItem("verification_token", payload.verification_token);
                     setCodeSent(true);
@@ -55,7 +54,6 @@ export const VerifyEmail = (props) => {
             actions.fetchData("/auth/email-validation", "PUT", body, access_t)
             .then(data => {
                 const { result, payload } = data
-                console.log(payload);
                 if (result === 200) {
                     sessionStorage.removeItem("verification_token");
                     sessionStorage.setItem("verified_token", payload.verified_token);

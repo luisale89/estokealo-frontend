@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Context } from "../store/appContex";
 import { noSpace, validate_field, validateFormInputs } from "../helpers/validations";
 import { handleChange } from "../helpers/handlers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export const LoginForm = () => {
 
@@ -71,6 +71,7 @@ export const LoginForm = () => {
                         ...form
                     });
                 } else if (result === 200) {
+                    actions.show_snackbar("Sesión iniciada con éxito", "success");
                     actions.login_user(payload);
                 }
             });
@@ -111,7 +112,11 @@ export const LoginForm = () => {
         <div className="card">
             <h5 className="card-title text-center pt-2">Inicio de sesión: </h5>
             <div className="card-body">
-                <p className="text-secondary">Ingrese sus datos para iniciar sesión:</p>
+                {userInfo.user ? 
+                <p className="mb-0">
+                    Hola de nuevo, {userInfo.user.firstName} <span role="img" aria-label="waving-hand">👋</span>
+                </p> : null}
+                <p className="text-secondary">Ingresa tus datos para iniciar sesión:</p>
                 <form
                 id="login-form" 
                 onSubmit={handleSubmit}
@@ -191,13 +196,14 @@ export const LoginForm = () => {
                                 mostrar contraseña
                             </label>
                         </div>
-                        <button 
-                        id="forgot-pw-link"
-                        className="btn btn-link mt-2"
-                        type="button"
-                        disabled={store.loading}>
-                            ¿Olvidaste tu contraseña?
-                        </button>
+                        <Link
+                            to={`/auth/restart-password?email=${form.fields[form_fields.email]}`}
+                            id="forgot-pw-link"
+                            className="btn btn-link mt-2"
+                            type="button"
+                            disabled={store.loading}>
+                                ¿Olvidaste tu contraseña?
+                        </Link>
                     </div> : null}
                     {/* submit button */}
                     <div className="custom-submit-container">

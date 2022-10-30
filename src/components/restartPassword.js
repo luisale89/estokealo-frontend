@@ -6,7 +6,7 @@ import { VerifyEmail } from "./verifyEmail";
 import { useNavigate } from "react-router-dom";
 import { validations } from "../helpers/validations";
 
-export const SignupForm = () => {
+export const RestartPassword = () => {
 
     //eslint-disable-next-line
     const {store, actions} = useContext(Context);
@@ -17,8 +17,6 @@ export const SignupForm = () => {
         email: "user-email",
         password: "user-password",
         re_password: "user-repeated-password",
-        first_name: "user-first-name",
-        last_name: "user-last-name",
         showPassword: "show-password-btn"
     }
     
@@ -27,16 +25,12 @@ export const SignupForm = () => {
             [form_fields.email]: "",
             [form_fields.password]: "",
             [form_fields.re_password]: "",
-            [form_fields.first_name]: "",
-            [form_fields.last_name]: "",
             [form_fields.showPassword]: ""
         },
         feedback: {
             [form_fields.email]: {valid: true, msg: ""},
             [form_fields.password]: {valid:true, msg: ""},
-            [form_fields.re_password]: {valid:true, msg: ""},
-            [form_fields.first_name]: {valid: true, msg: ""},
-            [form_fields.last_name]: {valid: true, msg: ""}
+            [form_fields.re_password]: {valid:true, msg: ""}
         }
     }
 
@@ -49,8 +43,8 @@ export const SignupForm = () => {
         const { valid, feedback } = validations["email"](email_in_params);
         //invalid email
         if (!valid) {
+            console.log(feedback);
             actions.show_snackbar("email inválido en URL", "error");
-            console.log(feedback)
             navigate("/auth/login", {replace: true});
         //email validated
         } else {
@@ -75,27 +69,23 @@ export const SignupForm = () => {
         if (!valid) { // si no fueron validados los campos requeridos
             return null;
         }
-        //enviar datos para crear cuenta
-        const body = {
-            password: form.fields[form_fields.password],
-            first_name: form.fields[form_fields.first_name],
-            last_name: form.fields[form_fields.last_name]
-        }
+        //enviar datos para cambiar la contraseña
+        const request_body = {
+            new_password: form.fields[form_fields.password],
+            re_new_password: form.fields[form_fields.re_password] 
+        };
         const verified_token = sessionStorage.getItem("verified_token");
-        //fetch_data
-        actions.fetchData("/auth/signup", "POST", body, verified_token)
-        .then(data => {
-            const {result, payload} = data
-            
-            //if all is ok
-            if (result === 201) {
-                actions.show_snackbar("Cuenta creada con éxito", "success");
-                actions.login_user(payload)
+        actions.fetchData("/auth/password-reset", "PUT", request_body, verified_token)
+        .then(({result, payload}) => {
+            if (result === 200) {
+                actions.show_snackbar("La contraseña ha sido actualizada", "success");
+                navigate("/auth/login", {replace: true});
             } else {
-                console.log(payload)
+                console.log(payload);
             }
-        });
-    }
+        })
+        return null;
+    };
 
     const handleInputChange = (event) => {
         setForm({
@@ -112,40 +102,14 @@ export const SignupForm = () => {
     if (emailVerified) {
         return (
             <div className="card">
-                <h5 className="card-title text-center pt-2">Crear una cuenta: </h5>
+                <h5 className="card-title text-center pt-2">Cambio de contraseña: </h5>
                 <div className="card-body">
-                    <p className="text-secondary">Ingrese sus datos para crear una cuenta:</p>
+                    <p className="text-secondary">Ingresa tu nueva contraseña:</p>
                     <form
                     id="signin-form" 
                     onSubmit={handleSubmit}
                     noValidate 
                     autoComplete="on">
-                        {/* name | lastname field */}
-                        <div className="input-group mb-2">
-                            <span className="input-group-text">Nombre | Apellido</span>
-                            <input 
-                                type="text" 
-                                aria-label="First name"
-                                placeholder="Nombre"
-                                className={`form-control ${form.feedback[form_fields.first_name].valid ? "" : "is-invalid"}`}
-                                name={form_fields.first_name}
-                                value={form.fields[form_fields.first_name]}
-                                onChange={handleInputChange}
-                                onBlur={checkField}
-                                disabled={store.loading}
-                                required/>
-                            <input 
-                                type="text" 
-                                aria-label="Last name" 
-                                placeholder="Apellido"
-                                className={`form-control ${form.feedback[form_fields.last_name].valid ? "" : "is-invalid"}`}
-                                name={form_fields.last_name}
-                                value={form.fields[form_fields.last_name]}
-                                onChange={handleInputChange}
-                                onBlur={checkField}
-                                disabled={store.loading}
-                                required/>
-                        </div>
                         {/* email field */}
                         <div className="mb-2 p-1">
                             <label htmlFor={form_fields.email} className="form-label">Correo electrónico:</label>
@@ -155,9 +119,6 @@ export const SignupForm = () => {
                                 placeholder="Ingesa tu correo electrónico" 
                                 name={form_fields.email}
                                 value={form.fields[form_fields.email]}
-                                onChange={handleInputChange}
-                                onKeyPress={noSpace}
-                                onBlur={checkField}
                                 disabled
                                 readOnly
                             />
@@ -167,7 +128,7 @@ export const SignupForm = () => {
                         </div>
                         {/* password field */}
                         <div className="mb-2 custom-pw-container p-1">
-                            <label htmlFor={form_fields.password} className="form-label">Contraseña:</label>
+                            <label htmlFor={form_fields.password} className="form-label">Nueva contraseña:</label>
                             <input
                                 className={`form-control ${form.feedback[form_fields.password].valid ? "" : "is-invalid"}`}
                                 type={form.fields[form_fields.showPassword] ? "text" : "password"} 
@@ -199,7 +160,7 @@ export const SignupForm = () => {
                         </div>
                         {/* password field */}
                         <div className="mb-2 custom-pw-container p-1">
-                            <label htmlFor={form_fields.re_password} className="form-label">Reingresa tu contraseña:</label>
+                            <label htmlFor={form_fields.re_password} className="form-label">Reingresa tu nueva contraseña:</label>
                             <input
                                 className={`form-control ${form.feedback[form_fields.re_password].valid ? "" : "is-invalid"}`}
                                 type={form.fields[form_fields.showPassword] ? "text" : "password"} 
