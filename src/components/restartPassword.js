@@ -60,11 +60,19 @@ export const RestartPassword = () => {
     const handleSubmit = (event) => { //event is the form that submit
         // se realiza validación de todos los requeridos y si todos son validos, se procede con el submit
         event.preventDefault();
-        const {valid, feedback} = validateFormInputs(event.target.id, form.feedback) // valida todos los campos requeridos del formulario con id
+        let {valid, feedback} = validateFormInputs(event.target.id, form.feedback) // valida todos los campos requeridos del formulario con id
         setForm({
             feedback: feedback,
             ...form
         });
+
+        if (form.fields[form_fields.password] !== form.fields[form_fields.re_password]) {
+            valid = false;
+            setForm({
+                feedback: Object.assign(form.feedback, {[form_fields.re_password]: {valid:false, msg:"Las contraseñas ingresadas no coinciden"}}),
+                ...form
+            })
+        }
 
         if (!valid) { // si no fueron validados los campos requeridos
             return null;
@@ -154,7 +162,7 @@ export const RestartPassword = () => {
                                 onChange={handleInputChange}
                                 id="show-password-input" />
                                 <label className="form-check-label" htmlFor="show-password-input">
-                                    mostrar contraseña
+                                    ver contraseña
                                 </label>
                             </div>
                         </div>
@@ -163,7 +171,7 @@ export const RestartPassword = () => {
                             <label htmlFor={form_fields.re_password} className="form-label">Reingresa tu nueva contraseña:</label>
                             <input
                                 className={`form-control ${form.feedback[form_fields.re_password].valid ? "" : "is-invalid"}`}
-                                type={form.fields[form_fields.showPassword] ? "text" : "password"} 
+                                type="password"
                                 placeholder="Reingresa tu nueva contraseña" 
                                 name={form_fields.re_password}
                                 value={form.fields[form_fields.re_password]}

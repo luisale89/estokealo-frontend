@@ -66,11 +66,28 @@ export const SignupForm = () => {
     const handleSubmit = (event) => { //event is the form that submit
         // se realiza validación de todos los requeridos y si todos son validos, se procede con el submit
         event.preventDefault();
-        const {valid, feedback} = validateFormInputs(event.target.id, form.feedback) // valida todos los campos requeridos del formulario con id
+        const ele = document.getElementById(form_fields.password);
+        if (ele) {
+            ele.type = "password";
+            setForm({
+                fields: Object.assign(form.fields, 
+                    {[form_fields.showPassword]: false}),
+                ...form
+            });
+        }
+        let {valid, feedback} = validateFormInputs(event.target.id, form.feedback) // valida todos los campos requeridos del formulario con id
         setForm({
             feedback: feedback,
             ...form
         });
+
+        if (form.fields[form_fields.password] !== form.fields[form_fields.re_password]) {
+            valid = false;
+            setForm({
+                feedback: Object.assign(form.feedback, {[form_fields.re_password]: {valid:false, msg:"Las contraseñas ingresadas no coinciden"}}),
+                ...form
+            })
+        }
 
         if (!valid) { // si no fueron validados los campos requeridos
             return null;
@@ -78,6 +95,7 @@ export const SignupForm = () => {
         //enviar datos para crear cuenta
         const body = {
             password: form.fields[form_fields.password],
+            re_password: form.fields[form_fields.re_password],
             first_name: form.fields[form_fields.first_name],
             last_name: form.fields[form_fields.last_name]
         }
@@ -86,13 +104,10 @@ export const SignupForm = () => {
         actions.fetchData("/auth/signup", "POST", body, verified_token)
         .then(data => {
             const {result, payload} = data
-            
-            //if all is ok
+            //response ok
             if (result === 201) {
                 actions.show_toast("Cuenta creada con éxito", "success");
                 actions.login_user(payload)
-            } else {
-                console.log(payload)
             }
         });
     }
@@ -202,7 +217,7 @@ export const SignupForm = () => {
                             <label htmlFor={form_fields.re_password} className="form-label">Reingresa tu contraseña:</label>
                             <input
                                 className={`form-control ${form.feedback[form_fields.re_password].valid ? "" : "is-invalid"}`}
-                                type={form.fields[form_fields.showPassword] ? "text" : "password"} 
+                                type="password"
                                 placeholder="Ingesa tu contraseña" 
                                 name={form_fields.re_password}
                                 value={form.fields[form_fields.re_password]}

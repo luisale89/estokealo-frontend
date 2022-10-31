@@ -93,9 +93,11 @@ const getState = ({ getStore, getActions, setStore }) => {
             .then(response => {
                //when response is resolved
                if (!response.ok) {
-                  if (response.status === 401) {
+                  if (response.status === 401) { //unauthorized
                      actions.logout_user();
                      actions.show_toast("La sesión ha expirado", "info");
+                  } else if (response.status === 400) { //bad.request
+                     actions.show_toast("Los datos ingresados no son válidos", "danger");
                   };
                }
                return response.json();
