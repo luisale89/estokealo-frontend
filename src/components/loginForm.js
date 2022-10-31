@@ -58,12 +58,14 @@ export const LoginForm = () => {
             //login user
             let body = {
                 email: form.fields[form_fields.email],
-                password: form.fields[form_fields.password]
+                password: form.fields[form_fields.password],
+                company_id: userInfo.companies.find((company) => company.name === form.fields[form_fields.company])?.ID
             };
+            //fetch data
             actions.fetchData(`/auth/login`, "POST", body)
             .then(data => {
                 const { result, payload } = data
-
+                console.log(payload);
                 if (result === 403) {
                     setForm({
                         feedback: Object.assign(form.feedback, 

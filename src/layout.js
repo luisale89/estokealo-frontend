@@ -8,7 +8,7 @@ import { Dashboard } from "./views/dashboard";
 //components
 import { SideNav } from "./components/side-nav";
 import { TopNav } from "./components/top-nav";
-import { Toast } from "./components/toast";
+import { AppToast } from "./components/toast";
 import { LoginForm } from "./components/loginForm";
 import { SignupForm } from "./components/signupForm";
 import { RestartPassword } from "./components/restartPassword";
@@ -18,7 +18,7 @@ export const Layout = () => {
     const { store } = useContext(Context);
     return (
         <div id="app-wrapper">
-            <Toast />
+            <AppToast />
             {store.backdrop ? <div>backdrop</div> : 
             <Routes>
                 <Route path="/auth" element={<AuthRouter />}>

@@ -3,7 +3,7 @@ import { useContext, useRef, useEffect } from "react";
 import { Context } from "../store/appContex";
 import { Toast } from "bootstrap";
 
-export const Toast = (props) => {
+export const AppToast = () => {
 
     //eslint-disable-next-line
     const {store, actions} = useContext(Context);

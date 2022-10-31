@@ -33,7 +33,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             return null;
          },
          hide_toast: () => {
-            /* Function to hide app Toast */
+            /* Function to hide app AppToast */
             setStore({toast_shown: false});
             const tid = sessionStorage.getItem("snackbar_timer");
             if (tid) {
