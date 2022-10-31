@@ -59,13 +59,12 @@ export const LoginForm = () => {
             let body = {
                 email: form.fields[form_fields.email],
                 password: form.fields[form_fields.password],
-                company_id: userInfo.companies.find((company) => company.name === form.fields[form_fields.company])?.ID
+                company_id: userInfo.companies.find((company) => company.name === form.fields[form_fields.company])?.id
             };
             //fetch data
             actions.fetchData(`/auth/login`, "POST", body)
             .then(data => {
                 const { result, payload } = data
-                console.log(payload);
                 if (result === 403) {
                     setForm({
                         feedback: Object.assign(form.feedback, 
@@ -158,7 +157,7 @@ export const LoginForm = () => {
                             >
                             <option value="">Entrar sin empresa...</option>
                             {userInfo.companies.map((item) => 
-                            <option key={item.ID} value={item.name}>
+                            <option key={item.id} value={item.name}>
                                 {item.name}
                             </option>)}
                         </select>

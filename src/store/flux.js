@@ -102,6 +102,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             })
             .then(data => {
                setStore({loading: false, backdrop: false});
+               console.log(data);
                //returs promise to caller
                return data
             })
