@@ -71,7 +71,7 @@ export const LoginForm = () => {
                         ...form
                     });
                 } else if (result === 200) {
-                    actions.show_snackbar("Sesión iniciada con éxito", "success");
+                    actions.show_toast("Sesión iniciada con éxito", "success");
                     actions.login_user(payload);
                 }
             });

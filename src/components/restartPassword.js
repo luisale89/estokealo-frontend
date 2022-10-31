@@ -44,7 +44,7 @@ export const RestartPassword = () => {
         //invalid email
         if (!valid) {
             console.log(feedback);
-            actions.show_snackbar("email inválido en URL", "error");
+            actions.show_toast("email inválido en URL", "danger");
             navigate("/auth/login", {replace: true});
         //email validated
         } else {
@@ -78,7 +78,7 @@ export const RestartPassword = () => {
         actions.fetchData("/auth/password-reset", "PUT", request_body, verified_token)
         .then(({result, payload}) => {
             if (result === 200) {
-                actions.show_snackbar("La contraseña ha sido actualizada", "success");
+                actions.show_toast("La contraseña ha sido actualizada", "success");
                 navigate("/auth/login", {replace: true});
             } else {
                 console.log(payload);
@@ -132,7 +132,7 @@ export const RestartPassword = () => {
                             <input
                                 className={`form-control ${form.feedback[form_fields.password].valid ? "" : "is-invalid"}`}
                                 type={form.fields[form_fields.showPassword] ? "text" : "password"} 
-                                placeholder="Ingesa tu contraseña" 
+                                placeholder="Ingesa tu nueva contraseña" 
                                 name={form_fields.password}
                                 value={form.fields[form_fields.password]}
                                 onChange={handleInputChange}
@@ -164,7 +164,7 @@ export const RestartPassword = () => {
                             <input
                                 className={`form-control ${form.feedback[form_fields.re_password].valid ? "" : "is-invalid"}`}
                                 type={form.fields[form_fields.showPassword] ? "text" : "password"} 
-                                placeholder="Ingesa tu contraseña" 
+                                placeholder="Reingresa tu nueva contraseña" 
                                 name={form_fields.re_password}
                                 value={form.fields[form_fields.re_password]}
                                 onChange={handleInputChange}

@@ -49,7 +49,7 @@ export const SignupForm = () => {
         const { valid, feedback } = validations["email"](email_in_params);
         //invalid email
         if (!valid) {
-            actions.show_snackbar("email inválido en URL", "error");
+            actions.show_toast("email inválido en URL", "danger");
             console.log(feedback)
             navigate("/auth/login", {replace: true});
         //email validated
@@ -89,7 +89,7 @@ export const SignupForm = () => {
             
             //if all is ok
             if (result === 201) {
-                actions.show_snackbar("Cuenta creada con éxito", "success");
+                actions.show_toast("Cuenta creada con éxito", "success");
                 actions.login_user(payload)
             } else {
                 console.log(payload)

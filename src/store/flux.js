@@ -7,9 +7,9 @@ const getState = ({ getStore, getActions, setStore }) => {
          userLoggedIn: false,
          loading: false,
          backdrop: true,
-         show_snackbar: false,
-         snackbar_text: "",
-         snackbar_type: "info" //info-success-warning-error
+         toast_shown: false,
+         toast_text: "",
+         toast_type: "info" //info-success-warning-danger
 		},
 		actions: {
          login_user: (payload={}) => {
@@ -29,12 +29,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                localStorage.removeItem("access_token");
                setStore({userLoggedIn: false, backdrop: true});
             }
-            actions.show_snackbar("sesion finalizada", "success");
+            actions.show_toast("Sesión finalizada con éxito", "success");
             return null;
          },
-         hide_snackbar: () => {
+         hide_toast: () => {
             /* Function to hide app Snackbar */
-            setStore({show_snackbar: false, snackbar_text: ""});
+            setStore({toast_shown: false});
             const tid = sessionStorage.getItem("snackbar_timer");
             if (tid) {
                clearTimeout(tid);
@@ -42,11 +42,11 @@ const getState = ({ getStore, getActions, setStore }) => {
             }
             return null;
          },
-         show_snackbar: (text="hello", type="info") => {
-            /* Function to show app snackbar */
+         show_toast: (text="hello", type="info") => {
+            /* Function to show app notifications */
             const actions = getActions();
-            const timer_id = setTimeout(actions.hide_snackbar, 3000);
-            setStore({show_snackbar: true, snackbar_text: text, snackbar_type: type});
+            const timer_id = setTimeout(actions.hide_toast, 3000); //3 seconds
+            setStore({toast_shown: true, toast_text: text, toast_type: type});
             sessionStorage.setItem("snackbar_timer", timer_id);
             return null;
          },
@@ -95,7 +95,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                if (!response.ok) {
                   if (response.status === 401) {
                      actions.logout_user();
-                     actions.show_snackbar("La sesión ha expirado", "info");
+                     actions.show_toast("La sesión ha expirado", "info");
                   };
                }
                return response.json();
@@ -106,7 +106,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                return data
             })
             .catch(error => {
-               actions.show_snackbar("Error de conexión. Intenta más tarde.", "error");
+               actions.show_toast("Error de conexión. Intenta más tarde.", "danger");
                setStore({
                   loading: false, 
                   backdrop: false
