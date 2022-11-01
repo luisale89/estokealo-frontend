@@ -4,14 +4,12 @@ import { validate_field, validateFormInputs, codeRestrict } from "../helpers/val
 import { handleChange } from "../helpers/handlers";
 
 export const VerifyEmail = (props) => {
-
-    //eslint-disable-next-line
+    //props = {email:str, callback:func}
+    
     const {store, actions} = useContext(Context);
-
     const form_fields= {
         code: "six-digit-code"
     }
-    
     const initialFormState = {
         fields: {
             [form_fields.code]: ""
@@ -42,6 +40,7 @@ export const VerifyEmail = (props) => {
                 const { result, payload } = data
                 if (result === 200) {
                     sessionStorage.setItem("verification_token", payload.verification_token);
+                    actions.show_toast("Código de validación enviado", "success");
                     setCodeSent(true);
                 }
                 return null;
@@ -54,10 +53,18 @@ export const VerifyEmail = (props) => {
             actions.fetchData("/auth/email-validation", "PUT", body, access_t)
             .then(data => {
                 const { result, payload } = data
+
                 if (result === 200) {
                     sessionStorage.removeItem("verification_token");
                     sessionStorage.setItem("verified_token", payload.verified_token);
+                    actions.show_toast("Correo electrónico verificado con éxito", "success");
                     props.callback?.(); //ejecuta funcion pasada como prop.
+                
+                } else if (result === 400) {
+                    setForm({
+                        feedback: Object.assign(form.feedback, {[form_fields.code]: {valid:false, msg:"El código ingresado es incorrecto"}}),
+                        ...form
+                    })
                 }
                 return null;
             });

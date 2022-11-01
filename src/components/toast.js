@@ -17,7 +17,7 @@ export const AppToast = () => {
     }, [store.toast_shown]);
 
     return (
-        <div className="toast" style={{position: "absolute", bottom:"20px", right:"10px", zIndex:99}} ref={toastRef}>
+        <div className="toast" style={{position: "absolute", bottom:"20px", right:"10px", zIndex:2000}} ref={toastRef}>
             <div className="toast-header">
                 <button className={`btn btn-${store.toast_type}`}></button>
                 <strong className="px-2">Notificación</strong>

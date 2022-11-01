@@ -108,6 +108,13 @@ export const SignupForm = () => {
             if (result === 201) {
                 actions.show_toast("Cuenta creada con éxito", "success");
                 actions.login_user(payload)
+            //jwt invalid
+            } else if (result === 401) {
+                navigate("/auth/login", {replace: true});
+            //user already exists
+            } else if (result === 409) {
+                actions.show_toast("Usuario ya existe, por favor inicia sesión", "danger");
+                navigate("/auth/login", {replace: true});
             }
         });
     }

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Modal } from "bootstrap";
 
 export const openModalFromSibling = (event) => {
-    document.getElementById(event.target.id).nextElementSibling.click(); //click modal opener
+    document.getElementById(event.target.id).previousElementSibling.click(); //click modal opener
     return null;
 }
 
@@ -28,8 +28,8 @@ export const AppModal = (props) => {
     return (
         <>  
             {/* insert modal opener as first sibling*/}
-            {props.children} 
             <span className="d-none" onClick={() => modal.show()}></span>
+            {props.children} 
             <div 
             className="modal fade" 
             ref={appModal}
