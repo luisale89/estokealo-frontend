@@ -34,7 +34,8 @@ export const AppModal = (props) => {
             className="modal fade" 
             ref={appModal}
             tabIndex="-1" aria-labelledby="appModalLabel"
-            aria-hidden="true">
+            aria-hidden="true"
+            style={{zIndex:2500}}>
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">

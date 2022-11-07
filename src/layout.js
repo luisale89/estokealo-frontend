@@ -6,13 +6,12 @@ import { Context } from "./store/appContex";
 import { Auth } from "./views/auth";
 import { Dashboard } from "./views/dashboard";
 //components
-import { SideNav } from "./components/side-nav";
-import { TopNav } from "./components/top-nav";
+import { Navbar } from "./components/navbar";
+import { AppHeader } from "./components/appHeader";
 import { AppToast } from "./components/toast";
 import { LoginForm } from "./components/loginForm";
 import { SignupForm } from "./components/signupForm";
 import { RestartPassword } from "./components/restartPassword";
-import { AppModal } from "./components/modal";
 
 
 export const Layout = () => {
@@ -56,15 +55,13 @@ const LayoutRouter = () => {
     if (store.userLoggedIn) {
         // protected view
         return (
-            <div id="main-app" className="row h-100">
-                {/* <TopNav /> */}
-                <div className="h-100" style={{width: "300px"}}>
-                    <SideNav />
-                </div>
-                <div className="col-auto h-100">
+            <>
+                <AppHeader />
+                <div className="d-flex h-100" style={{paddingTop: "60px"}}>
+                    <Navbar />
                     <Outlet />
                 </div>
-            </div>
+            </>
         )
     } else {
         return (
