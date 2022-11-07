@@ -210,7 +210,7 @@ export const LoginForm = () => {
                     <div className="custom-submit-container">
                         {userInfo.user ? 
                         <button 
-                            className="btn btn-outline-secondary"
+                            className="btn btn-outline-danger"
                             type="button"
                             onClick={restartLogin}
                             disabled={store.loading}>

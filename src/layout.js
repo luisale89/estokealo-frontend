@@ -5,6 +5,7 @@ import { Context } from "./store/appContex";
 //views
 import { Auth } from "./views/auth";
 import { Dashboard } from "./views/dashboard";
+import { Stores } from "./views/stores";
 //components
 import { Navbar } from "./components/navbar";
 import { AppHeader } from "./components/appHeader";
@@ -33,7 +34,7 @@ export const Layout = () => {
                     <Route path="/home" element={<div><p>home...</p></div>}></Route>
                     <Route path="/orders" element={<div><p>pedidos...</p></div>}></Route>
                     <Route path="/products" element={<div><p>products...</p></div>}></Route>
-                    <Route path="/stores" element={<div><p>Almacenes...</p></div>}></Route>
+                    <Route path="/stores" element={<Stores />}></Route>
                     <Route path="/thirds" element={<div><p>Terceros...</p></div>}>
                         <Route path="/thirds/clients" element={<div><p>clientes...</p></div>}></Route>
                         <Route path="/thirds/providers" element={<div><p>clientes...</p></div>}></Route>

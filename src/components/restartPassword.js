@@ -189,7 +189,7 @@ export const RestartPassword = () => {
                         {/* submit button */}
                         <div className="custom-submit-container">
                             <button 
-                                className="btn btn-outline-secondary"
+                                className="btn btn-outline-danger"
                                 type="button"
                                 onClick={() => {window.history.back()}}
                                 disabled={store.loading}>

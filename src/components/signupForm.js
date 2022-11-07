@@ -242,7 +242,7 @@ export const SignupForm = () => {
                         {/* submit button */}
                         <div className="custom-submit-container">
                             <button 
-                                className="btn btn-outline-secondary"
+                                className="btn btn-outline-danger"
                                 type="button"
                                 onClick={() => {window.history.back()}}
                                 disabled={store.loading}>
