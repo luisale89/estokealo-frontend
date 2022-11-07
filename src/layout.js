@@ -13,6 +13,7 @@ import { AppToast } from "./components/toast";
 import { LoginForm } from "./components/loginForm";
 import { SignupForm } from "./components/signupForm";
 import { RestartPassword } from "./components/restartPassword";
+import { AppModal } from "./components/modal";
 
 
 export const Layout = () => {
@@ -20,6 +21,7 @@ export const Layout = () => {
     return (
         <div id="app-wrapper">
             <AppToast />
+            <AppModal />
             {store.backdrop ? <div>backdrop</div> : 
             <Routes>
                 <Route element={<AuthRouter />}>

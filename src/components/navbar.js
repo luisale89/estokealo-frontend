@@ -63,7 +63,7 @@ export const Navbar = () => {
                     <NavLink to="/thirds" className={({isActive}) => isActive ? "nav-link active btn-toggle" : "nav-link link-dark"} data-bs-toggle="collapse" data-bs-target="#thirds-collapse" aria-expanded="true">
                         <i className="bi bi-people-fill pe-none me-2"></i>
                         <span>Terceros</span>
-                        <i class="bi bi-caret-down-fill" style={{position:"absolute", right:10}}></i>
+                        <i className="bi bi-caret-down-fill" style={{position:"absolute", right:10}}></i>
                     </NavLink>
                     <div className="collapse my-2" id="thirds-collapse">
                         <ul className="nav flex-column ps-4">
