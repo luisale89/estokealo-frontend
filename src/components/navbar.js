@@ -31,53 +31,54 @@ export const Navbar = () => {
                 >
                 <li className="nav-item">
                     <NavLink to="/home" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
-                        <i className="bi bi-house-fill pe-none me-2"></i>
+                        <i className="bi bi-house-door-fill pe-none me-2"></i>
                         <span>Home</span>
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to="/dashboard" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
-                        <i className="bi bi-speedometer pe-none me-2"></i>
-                        <span>Dashboard</span>
+                        <i className="bi bi-graph-up-arrow pe-none me-2"></i>
+                        <span>Estadísticas</span>
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to="/orders" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
-                        <i className="bi bi-card-checklist pe-none me-2"></i>
+                        <i className="bi bi-cart pe-none me-2"></i>
                         <span>Pedidos</span>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to="/products" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
-                        <i className="bi bi-boxes pe-none me-2"></i>
-                        <span>Productos</span>
-                    </NavLink>
-                </li>
-                <li>
                     <NavLink to="/stores" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
-                        <i className="bi bi-shop pe-none me-2"></i>
+                        <i className="bi bi-truck pe-none me-2"></i>
                         <span>Almacenes</span>
                     </NavLink>
                 </li>
                 <li style={{position:"relative"}}>
-                    <NavLink to="/thirds" className={({isActive}) => isActive ? "nav-link active btn-toggle" : "nav-link link-dark"} data-bs-toggle="collapse" data-bs-target="#thirds-collapse" aria-expanded="true">
-                        <i className="bi bi-people-fill pe-none me-2"></i>
-                        <span>Terceros</span>
+                    <NavLink to="/catalogs" className={({isActive}) => isActive ? "nav-link active btn-toggle" : "nav-link link-dark"} data-bs-toggle="collapse" data-bs-target="#catalogs-collapse" aria-expanded="true">
+                        <i className="bi bi-book pe-none me-2"></i>
+                        <span>Catálogos</span>
                         <i className="bi bi-caret-down-fill" style={{position:"absolute", right:10}}></i>
                     </NavLink>
-                    <div className="collapse my-2" id="thirds-collapse">
+                    <div className="collapse my-2" id="catalogs-collapse">
                         <ul className="nav flex-column ps-4">
-                            <li><NavLink to="/thirds/clients" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>Clientes</NavLink></li>
-                            <li><NavLink to="/thirds/providers" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>Proveedores</NavLink></li>
-                            <li><NavLink to="/thirds/users" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>Usuarios</NavLink></li>
+                            <li><NavLink to="/catalogs/items" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-boxes pe-none me-2"></i><span>Items</span></NavLink></li>
+                            <li><NavLink to="/catalogs/qrcodes" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-qr-code-scan pe-none me-2"></i><span>Códigos QR</span></NavLink></li>
                         </ul>
                     </div>
                 </li>
-                <li>
-                    <NavLink to="/settings" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
-                        <i className="bi bi-toggles2 pe-none me-2"></i>
-                        <span>Configuración</span>
+                <li style={{position:"relative"}}>
+                    <NavLink to="/resources" className={({isActive}) => isActive ? "nav-link active btn-toggle" : "nav-link link-dark"} data-bs-toggle="collapse" data-bs-target="#resources-collapse" aria-expanded="true">
+                        <i className="bi bi-briefcase pe-none me-2"></i>
+                        <span>Recursos</span>
+                        <i className="bi bi-caret-down-fill" style={{position:"absolute", right:10}}></i>
                     </NavLink>
+                    <div className="collapse my-2" id="resources-collapse">
+                        <ul className="nav flex-column ps-4">
+                            <li><NavLink to="/resources/users" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-people pe-none me-2"></i><span>Usuarios</span></NavLink></li>
+                            <li><NavLink to="/resources/clients" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-person-check pe-none me-2"></i><span>Clientes</span></NavLink></li>
+                            <li><NavLink to="/resources/providers" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-shop-window pe-none me-2"></i><span>Provedores</span></NavLink></li>
+                        </ul>
+                    </div>
                 </li>
                 <hr />
                 <li>
@@ -85,6 +86,12 @@ export const Navbar = () => {
                         {/* <svg className="bi pe-none me-2" width="16" height="16"></svg> */}
                         <i className="bi bi-person-circle pe-none me-2"></i>
                         <span>Perfil</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink to="/settings" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
+                        <i className="bi bi-gear pe-none me-2"></i>
+                        <span>Configuración</span>
                     </NavLink>
                 </li>
             </ul>

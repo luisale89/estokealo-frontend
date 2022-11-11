@@ -35,7 +35,12 @@ export const AppHeader = () => {
                         <li><Link className="dropdown-item" to="/profile">Perfil</Link></li>
                         <li><hr className="dropdown-divider" /></li>
                         <li><Link className="dropdown-item" to="/settings">Cambiar de empresa...</Link></li>
-                        <li><button type="button" className="dropdown-item btn btn-link text-danger" onClick={() => show_modal(modal_content)}>Cerrar Sesión</button></li>
+                        <li>
+                            <button type="button" className="dropdown-item btn btn-link text-danger" onClick={() => show_modal(modal_content)}>
+                                <i className="bi bi-box-arrow-right pe-none me-2"></i>
+                                <span>Cerrar Sesión</span>
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -9,8 +9,7 @@ export const show_modal = ({ title, body, callback }) => {
     document.getElementById("appModalCallback").removeEventListener("click", callback); //remove prev callback
     document.getElementById("appModalCallback").addEventListener("click", callback); //add new callback
     
-    const app_modal = document.getElementById(modal_id);
-    Modal.getInstance(app_modal)?.show(); //show modal with bootstrap
+    Modal.getInstance(document.getElementById(modal_id))?.show(); //show modal with bootstrap
 }
 
 export const AppModal = () => {
