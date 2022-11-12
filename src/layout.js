@@ -32,15 +32,18 @@ export const Layout = () => {
                 </Route>
                 <Route element={<LayoutRouter />}>
                     <Route path="/" element={<Navigate to="/dashboard" replace={true} />}></Route>
-                    <Route path="/dashboard" element={<Dashboard />}></Route>
                     <Route path="/home" element={<div><p>home...</p></div>}></Route>
+                    <Route path="/dashboard" element={<Dashboard />}></Route>
                     <Route path="/orders" element={<div><p>pedidos...</p></div>}></Route>
-                    <Route path="/products" element={<div><p>products...</p></div>}></Route>
                     <Route path="/stores" element={<Stores />}></Route>
-                    <Route path="/thirds" element={<div><p>Terceros...</p></div>}>
-                        <Route path="/thirds/clients" element={<div><p>clientes...</p></div>}></Route>
-                        <Route path="/thirds/providers" element={<div><p>clientes...</p></div>}></Route>
-                        <Route path="/thirds/users" element={<div><p>usuarios...</p></div>}></Route>
+                    <Route path="/catalogs" element={<div><p>Catalogos...</p></div>}>
+                        <Route path="/catalogs/items" element={<div><p>clientes...</p></div>}></Route>
+                        <Route path="/catalogs/qrcodes" element={<div><p>clientes...</p></div>}></Route>
+                    </Route>
+                    <Route path="/resources" element={<div><p>Terceros...</p></div>}>
+                        <Route path="/resources/clients" element={<div><p>clientes...</p></div>}></Route>
+                        <Route path="/resources/providers" element={<div><p>clientes...</p></div>}></Route>
+                        <Route path="/resources/users" element={<div><p>usuarios...</p></div>}></Route>
                     </Route>
                     <Route path="/settings" element={<div><p>Configuración...</p></div>}></Route>
                     <Route path="/profile" element={<div><p>perfil...</p></div>}></Route>

@@ -9,7 +9,7 @@ div#auth-view {
             padding-bottom: 20px;
         }
         div.custom-auth-content {
-            overflow: scroll;
+            overflow: auto;
             width: 100%;
             max-width: 500px;
             .custom-pw-container {
@@ -34,6 +34,6 @@ div#auth-view {
     .custom-side-container{
         background-color: $color-bg;
         height: 100%;
-        overflow: scroll;
+        overflow: auto;
     }
 }

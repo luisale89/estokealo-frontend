@@ -43,13 +43,13 @@ export const Navbar = () => {
                 </li>
                 <li>
                     <NavLink to="/orders" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
-                        <i className="bi bi-cart pe-none me-2"></i>
-                        <span>Pedidos</span>
+                        <i className="bi bi-card-checklist pe-none me-2"></i>
+                        <span>Órdenes</span>
                     </NavLink>
                 </li>
                 <li>
                     <NavLink to="/stores" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}>
-                        <i className="bi bi-truck pe-none me-2"></i>
+                        <i className="bi bi-shop-window pe-none me-2"></i>
                         <span>Almacenes</span>
                     </NavLink>
                 </li>
@@ -76,7 +76,7 @@ export const Navbar = () => {
                         <ul className="nav flex-column ps-4">
                             <li><NavLink to="/resources/users" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-people pe-none me-2"></i><span>Usuarios</span></NavLink></li>
                             <li><NavLink to="/resources/clients" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-person-check pe-none me-2"></i><span>Clientes</span></NavLink></li>
-                            <li><NavLink to="/resources/providers" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-shop-window pe-none me-2"></i><span>Provedores</span></NavLink></li>
+                            <li><NavLink to="/resources/providers" className={({isActive}) => isActive ? "nav-link active" : "nav-link link-dark"}><i className="bi bi-globe pe-none me-2"></i><span>Proveedores</span></NavLink></li>
                         </ul>
                     </div>
                 </li>

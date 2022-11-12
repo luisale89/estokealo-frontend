@@ -5,6 +5,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
          userLoggedIn: false,
+         userData: {},
          loading: false,
          backdrop: true,
          toast_shown: false,
