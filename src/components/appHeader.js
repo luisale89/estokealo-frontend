@@ -45,7 +45,7 @@ export const AppHeader = () => {
                                     {store.sessionRoleData ? store.sessionRoleData.roleFunction.name: "-"}
                                 </span>
                                 <span className="d-block text-truncate"><i className="bi bi-building pe-none me-2"></i>
-                                    {store.sessionRoleData ? store.sessionRoleData.company.name : "Sin compañía..."}
+                                    {store.sessionRoleData ? store.sessionRoleData.company.name : "-"}
                                 </span>
                             </div>
                         </li>

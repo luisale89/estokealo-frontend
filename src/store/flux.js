@@ -69,15 +69,20 @@ const getState = ({ getStore, getActions, setStore }) => {
                .then(data => {
                   //eslint-disable-next-line
                   const { result, payload } = data;
-                  result === 200 ? setStore({
-                     userLoggedIn: true,
-                     sessionUserData: payload.user,
-                     sessionRoleData: payload.role
-                  }) : setStore({
-                     userLoggedIn: false,
-                     sessionUserData: {},
-                     sessionRoleData: {}
-                  });
+                  
+                  if (result === 200) {
+                     setStore({
+                        userLoggedIn: true,
+                        sessionUserData: payload.user,
+                        sessionRoleData: payload.role
+                     })
+                  } else {
+                     setStore({
+                        userLoggedIn: false,
+                        sessionUserData: {},
+                        sessionRoleData: {}
+                     })
+                  }
                });
             }
             return null;
