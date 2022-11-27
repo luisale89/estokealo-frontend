@@ -31,16 +31,22 @@ export const AppHeader = () => {
                         data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" className="rounded-circle" />
-                        <strong className="ms-2 d-none d-md-inline-block text-truncate" style={{maxWidth: "150px"}}>
-                            Luis L.
+                        <strong className="ms-2 d-none d-md-inline-block text-truncate" style={{maxWidth: "100px"}}>
+                            {store.sessionUserData.firstName}
                         </strong>
                     </button>
                     <ul className="dropdown-menu text-small shadow" style={{margin: "0px"}}>
                         <li className="dropdown-header">
-                            <div style={{maxWidth:"300px"}}>
-                                <strong className="d-block text-primary "><i className="bi bi-person-check-fill pe-none me-2"></i>Luis Lucena</strong>
-                                <span className="d-block"><i className="bi bi-person-badge pe-none me-2"></i>Administrador</span>
-                                <span className="d-block"><i className="bi bi-building pe-none me-2"></i>Lider frio de lara C.A.</span>
+                            <div style={{maxWidth:"200px"}}>
+                                <strong className="d-block text-primary text-truncate"><i className="bi bi-person-check-fill pe-none me-2"></i>
+                                    {store.sessionUserData.firstName  + " " + store.sessionUserData.lastName}
+                                </strong>
+                                <span className="d-block text-truncate"><i className="bi bi-person-badge pe-none me-2"></i>
+                                    {store.sessionRoleData ? store.sessionRoleData.roleFunction.name: "-"}
+                                </span>
+                                <span className="d-block text-truncate"><i className="bi bi-building pe-none me-2"></i>
+                                    {store.sessionRoleData ? store.sessionRoleData.company.name : "Sin compañía..."}
+                                </span>
                             </div>
                         </li>
                         <li><hr className="dropdown-divider" /></li>

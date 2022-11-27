@@ -7,7 +7,7 @@ import { useNavigate, Link } from "react-router-dom";
 export const LoginForm = () => {
 
     const {store, actions} = useContext(Context);
-    const [userInfo, setUserInfo] = useState({});
+    const [user, setUser] = useState({});
     const navigate = useNavigate();
 
     const form_fields= {
@@ -54,12 +54,12 @@ export const LoginForm = () => {
         if (!valid) { // si no fueron validados los campos requeridos
             return null;
         }
-        if (userInfo.user) {
+        if (user.public_info) {
             //login user
             let body = {
                 email: form.fields[form_fields.email],
                 password: form.fields[form_fields.password],
-                company_id: userInfo.companies.find((company) => company.name === form.fields[form_fields.company])?.id
+                company_id: user.public_info.companies.find((company) => company.name === form.fields[form_fields.company])?.id
             };
             //fetch data
             actions.fetchData(`/auth/login`, "POST", body)
@@ -85,7 +85,7 @@ export const LoginForm = () => {
                     //redirect to signup view
                     navigate(`/auth/signup${"?email="+form.fields[form_fields.email]}`);
                 } else if (result === 200){
-                    setUserInfo(payload);
+                    setUser(payload);
                 };
             });
         };
@@ -106,17 +106,17 @@ export const LoginForm = () => {
 
     const restartLogin = () => {
         setForm(initialFormState);
-        setUserInfo({});
+        setUser({});
     }
 
     return (
         <div className="card">
             <h5 className="card-title text-center pt-2">Inicio de sesión: </h5>
             <div className="card-body">
-                {userInfo.user ? 
+                {user.public_info ? 
                 <p className="mb-0">
-                    Hola de nuevo, {userInfo.user.firstName} <span role="img" aria-label="waving-hand">👋</span>
-                </p> : null}
+                    Hola de nuevo, {user.public_info.firstName} <span role="img" aria-label="waving-hand">👋</span>
+                </p> : <></>}
                 <p className="text-secondary">Ingresa tus datos para iniciar sesión:</p>
                 <form
                 id="login-form" 
@@ -135,7 +135,7 @@ export const LoginForm = () => {
                             onChange={handleInputChange}
                             onKeyPress={noSpace}
                             onBlur={checkField}
-                            disabled={store.loading || userInfo.user}
+                            disabled={store.loading || user.public_info}
                             required
                         />
                         {/* {form.feedback[form_fields.email].valid ? null : 
@@ -145,7 +145,7 @@ export const LoginForm = () => {
                         </div>
                     </div>
                     {/* company options field */}
-                    {userInfo.companies ? 
+                    {user.public_info ? 
                     <div className="mb-2 p-1">
                         <label htmlFor="company" className="form-label">Empresa:</label>
                         <select 
@@ -156,7 +156,7 @@ export const LoginForm = () => {
                             disabled={store.loading}
                             >
                             <option value="">Entrar sin empresa...</option>
-                            {userInfo.companies.map((item) => 
+                            {user.public_info.companies.map((item) => 
                             <option key={item.id} value={item.name}>
                                 {item.name}
                             </option>)}
@@ -164,9 +164,9 @@ export const LoginForm = () => {
                         <div id="companyHelp" className="form-text">
                             Selecciona la empresa con la que deseas iniciar sesión.
                         </div>
-                    </div>: ""}
+                    </div>: <></>}
                     {/* password field */}
-                    {userInfo.user ? 
+                    {user.public_info ? 
                     <div className="mb-2 custom-pw-container p-1">
                         <label htmlFor={form_fields.password} className="form-label">Contraseña:</label>
                         <input
@@ -208,7 +208,7 @@ export const LoginForm = () => {
                     </div> : null}
                     {/* submit button */}
                     <div className="custom-submit-container">
-                        {userInfo.user ? 
+                        {user.public_info ? 
                         <button 
                             className="btn btn-outline-danger"
                             type="button"
@@ -220,7 +220,7 @@ export const LoginForm = () => {
                             className="btn btn-primary submit-btn custom-submit-btn"
                             type="submit"
                             disabled={store.loading}>
-                                {store.loading ? <span>Cargando...</span> : userInfo.user ? "Ingresar" : "Siguiente"}
+                                {store.loading ? <span>Cargando...</span> : user.public_info ? "Ingresar" : "Siguiente"}
                         </button>
                     </div>
                 </form>

@@ -5,7 +5,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
          userLoggedIn: false,
-         userData: {},
+         sessionUserData: {},
+         sessionRoleData: {},
          loading: false,
          backdrop: true,
          toast_shown: false,
@@ -18,7 +19,11 @@ const getState = ({ getStore, getActions, setStore }) => {
             login_function
                */
             localStorage.setItem("access_token", payload.access_token);
-            setStore({userLoggedIn: true});
+            setStore({
+               userLoggedIn: true,
+               sessionUserData: payload.user,
+               sessionRoleData: payload.role
+            });
             return null;
          },
          logout_user: () => {
@@ -60,11 +65,19 @@ const getState = ({ getStore, getActions, setStore }) => {
                setStore({userLoggedIn: false, backdrop: false});
             } else {
                setStore({backdrop: true});
-               actions.fetchData("/auth/test-user-validation")
+               actions.fetchData("/auth/test-jwt")
                .then(data => {
                   //eslint-disable-next-line
                   const { result, payload } = data;
-                  result === 200 ? setStore({userLoggedIn: true}) : setStore({userLoggedIn: false});
+                  result === 200 ? setStore({
+                     userLoggedIn: true,
+                     sessionUserData: payload.user,
+                     sessionRoleData: payload.role
+                  }) : setStore({
+                     userLoggedIn: false,
+                     sessionUserData: {},
+                     sessionRoleData: {}
+                  });
                });
             }
             return null;
